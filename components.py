@@ -1,19 +1,19 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime, timedelta
 import plotly.express as px
+from datetime import datetime, timedelta
 
 def render_sidebar():
     with st.sidebar:
         st.header("Filters")
-        
+
         # Status filter
         st.session_state.status_filter = st.multiselect(
             "Status",
             ["To Do", "In Progress", "Done"],
             default=st.session_state.get('status_filter', [])
         )
-        
+
         # Priority filter
         st.session_state.priority_filter = st.multiselect(
             "Priority",
@@ -23,7 +23,7 @@ def render_sidebar():
 
 def render_dashboard(data_manager):
     stats = data_manager.get_ticket_stats()
-    
+
     # Summary metrics
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -35,21 +35,31 @@ def render_dashboard(data_manager):
 
     # Charts
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.subheader("Tickets by Status")
+        status_df = pd.DataFrame({
+            'Status': stats['status_counts'].index,
+            'Count': stats['status_counts'].values
+        })
         fig1 = px.pie(
-            values=stats['status_counts'].values,
-            names=stats['status_counts'].index,
+            status_df,
+            values='Count',
+            names='Status',
             title="Ticket Distribution by Status"
         )
         st.plotly_chart(fig1)
-    
+
     with col2:
         st.subheader("Tickets by Priority")
+        priority_df = pd.DataFrame({
+            'Priority': stats['priority_counts'].index,
+            'Count': stats['priority_counts'].values
+        })
         fig2 = px.bar(
-            x=stats['priority_counts'].index,
-            y=stats['priority_counts'].values,
+            priority_df,
+            x='Priority',
+            y='Count',
             title="Ticket Distribution by Priority"
         )
         st.plotly_chart(fig2)
@@ -57,7 +67,7 @@ def render_dashboard(data_manager):
 def render_ticket_form(data_manager):
     with st.form("ticket_form"):
         ticket_id = st.session_state.get('editing_ticket_id', None)
-        
+
         title = st.text_input("Title", key="title")
         description = st.text_area("Description", key="description")
         status = st.selectbox("Status", ["To Do", "In Progress", "Done"], key="status")
@@ -75,7 +85,7 @@ def render_ticket_form(data_manager):
             else:
                 data_manager.add_ticket(title, description, status, priority, due_date)
                 st.success("Ticket added successfully!")
-            
+
             # Clear form
             st.session_state.editing_ticket_id = None
             st.session_state.title = ""
@@ -89,7 +99,7 @@ def render_ticket_list(data_manager):
         st.session_state.status_filter,
         st.session_state.priority_filter
     )
-    
+
     if filtered_tickets.empty:
         st.info("No tickets found matching the filters.")
         return
@@ -99,7 +109,7 @@ def render_ticket_list(data_manager):
             st.write(f"**Description:** {ticket['description']}")
             st.write(f"**Priority:** {ticket['priority']}")
             st.write(f"**Due Date:** {ticket['due_date'].strftime('%Y-%m-%d')}")
-            
+
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("Edit", key=f"edit_{ticket['id']}"):
@@ -109,7 +119,7 @@ def render_ticket_list(data_manager):
                     st.session_state.status = ticket['status']
                     st.session_state.priority = ticket['priority']
                     st.session_state.due_date = ticket['due_date']
-            
+
             with col2:
                 if st.button("Delete", key=f"delete_{ticket['id']}"):
                     data_manager.delete_ticket(ticket['id'])
