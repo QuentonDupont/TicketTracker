@@ -1,0 +1,550 @@
+{
+  "pagination": {
+    "total": 90,
+    "offset": 0,
+    "limit": 200,
+    "hasMore": false
+  },
+  "items": [
+    {
+      "name": "grid",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/grid"
+    },
+    {
+      "name": "moving-line",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/moving-line"
+    },
+    {
+      "name": "sparkles",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/sparkles"
+    },
+    {
+      "name": "spotlight",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/spotlight"
+    },
+    {
+      "name": "glowing-stars",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/glowing-stars"
+    },
+    {
+      "name": "text-reveal-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/text-reveal-card"
+    },
+    {
+      "name": "animated-tooltip",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/animated-tooltip"
+    },
+    {
+      "name": "following-pointer",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/following-pointer"
+    },
+    {
+      "name": "background-beams",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-beams"
+    },
+    {
+      "name": "svg-mask-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/svg-mask-effect"
+    },
+    {
+      "name": "infinite-moving-cards",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/infinite-moving-cards"
+    },
+    {
+      "name": "3d-pin",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/3d-pin"
+    },
+    {
+      "name": "evervault-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/evervault-card"
+    },
+    {
+      "name": "parallax-scroll",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/parallax-scroll"
+    },
+    {
+      "name": "parallax-scroll-2",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/parallax-scroll-2"
+    },
+    {
+      "name": "tracing-beam",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/tracing-beam"
+    },
+    {
+      "name": "container-scroll-animation",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/container-scroll-animation"
+    },
+    {
+      "name": "text-generate-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/text-generate-effect"
+    },
+    {
+      "name": "meteors",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/meteors"
+    },
+    {
+      "name": "card-stack",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/card-stack"
+    },
+    {
+      "name": "moving-border",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/moving-border"
+    },
+    {
+      "name": "lamp",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/lamp"
+    },
+    {
+      "name": "sticky-scroll-reveal",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/sticky-scroll-reveal"
+    },
+    {
+      "name": "floating-navbar",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/floating-navbar"
+    },
+    {
+      "name": "navbar-menu",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/navbar-menu"
+    },
+    {
+      "name": "tailwindcss-buttons",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/tailwindcss-buttons"
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/bento-grid"
+    },
+    {
+      "name": "card-hover-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/card-hover-effect"
+    },
+    {
+      "name": "google-gemini-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/google-gemini-effect"
+    },
+    {
+      "name": "typewriter-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/typewriter-effect"
+    },
+    {
+      "name": "background-boxes",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-boxes"
+    },
+    {
+      "name": "3d-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/3d-card"
+    },
+    {
+      "name": "images-slider",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/images-slider"
+    },
+    {
+      "name": "direction-aware-hover",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/direction-aware-hover"
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/tabs"
+    },
+    {
+      "name": "hero-parallax",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/hero-parallax"
+    },
+    {
+      "name": "wavy-background",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/wavy-background"
+    },
+    {
+      "name": "background-gradient",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-gradient"
+    },
+    {
+      "name": "layout-grid",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/layout-grid"
+    },
+    {
+      "name": "background-gradient-animation",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-gradient-animation"
+    },
+    {
+      "name": "macbook-scroll",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/macbook-scroll"
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/input"
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/label"
+    },
+    {
+      "name": "multi-step-loader",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/multi-step-loader"
+    },
+    {
+      "name": "globe",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/globe"
+    },
+    {
+      "name": "aurora-background",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/aurora-background"
+    },
+    {
+      "name": "canvas-reveal-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/canvas-reveal-effect"
+    },
+    {
+      "name": "hover-border-gradient",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/hover-border-gradient"
+    },
+    {
+      "name": "hero-highlight",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/hero-highlight"
+    },
+    {
+      "name": "vortex",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/vortex"
+    },
+    {
+      "name": "wobble-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/wobble-card"
+    },
+    {
+      "name": "placeholders-and-vanish-input",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/placeholders-and-vanish-input"
+    },
+    {
+      "name": "flip-words",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/flip-words"
+    },
+    {
+      "name": "link-preview",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/link-preview"
+    },
+    {
+      "name": "glare-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/glare-card"
+    },
+    {
+      "name": "animated-modal",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/animated-modal"
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/sidebar"
+    },
+    {
+      "name": "apple-cards-carousel",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/apple-cards-carousel"
+    },
+    {
+      "name": "shooting-stars",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/shooting-stars"
+    },
+    {
+      "name": "stars-background",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/stars-background"
+    },
+    {
+      "name": "compare",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/compare"
+    },
+    {
+      "name": "card-spotlight",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/card-spotlight"
+    },
+    {
+      "name": "cover",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/cover"
+    },
+    {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/file-upload"
+    },
+    {
+      "name": "floating-dock",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/floating-dock"
+    },
+    {
+      "name": "focus-cards",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/focus-cards"
+    },
+    {
+      "name": "background-beams-with-collision",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-beams-with-collision"
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/timeline"
+    },
+    {
+      "name": "text-hover-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/text-hover-effect"
+    },
+    {
+      "name": "lens",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/lens"
+    },
+    {
+      "name": "background-lines",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-lines"
+    },
+    {
+      "name": "animated-testimonials",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/animated-testimonials"
+    },
+    {
+      "name": "world-map",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/world-map"
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/code-block"
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/carousel"
+    },
+    {
+      "name": "colourful-text",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/colourful-text"
+    },
+    {
+      "name": "spotlight-new",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/spotlight-new"
+    },
+    {
+      "name": "glowing-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/glowing-effect"
+    },
+    {
+      "name": "3d-marquee",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/3d-marquee"
+    },
+    {
+      "name": "container-text-flip",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/container-text-flip"
+    },
+    {
+      "name": "resizable-navbar",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/resizable-navbar"
+    },
+    {
+      "name": "draggable-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/draggable-card"
+    },
+    {
+      "name": "sticky-banner",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/sticky-banner"
+    },
+    {
+      "name": "pointer-highlight",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/pointer-highlight"
+    },
+    {
+      "name": "stateful-button",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/stateful-button"
+    },
+    {
+      "name": "loader",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/loader"
+    },
+    {
+      "name": "comet-card",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/comet-card"
+    },
+    {
+      "name": "background-ripple-effect",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/background-ripple-effect"
+    },
+    {
+      "name": "pixelated-canvas",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/pixelated-canvas"
+    },
+    {
+      "name": "layout-text-flip",
+      "type": "registry:ui",
+      "registry": "@aceternity",
+      "addCommandArgument": "@aceternity/layout-text-flip"
+    }
+  ]
+}

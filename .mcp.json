@@ -1,0 +1,55 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-playwright"
+      ],
+      "env": {
+        "PLAYWRIGHT_BROWSER": "chromium",
+        "PLAYWRIGHT_HEADLESS": "true"
+      }
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "shadcn-ui-enhanced": {
+      "command": "npx",
+      "args": [
+        "@jpisnice/shadcn-ui-mcp-server"
+      ]
+    },
+    "magic-ui": {
+      "command": "npx",
+      "args": [
+        "@magicuidesign/mcp"
+      ]
+    },
+    "material-ui": {
+      "command": "npx",
+      "args": [
+        "@mui/mcp"
+      ]
+    },
+    "magic-builder": {
+      "command": "npx",
+      "args": [
+        "@21st-dev/magic"
+      ]
+    }
+  }
+}
