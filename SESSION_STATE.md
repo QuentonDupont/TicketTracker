@@ -126,10 +126,11 @@
 ## 🚨 Important Notes
 
 ### Security
-- **CRITICAL**: Original GitHub token (`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`) was exposed in chat
-  - User MUST revoke this token immediately
-  - Create new token following `GITHUB_MCP_SETUP.md`
-  - Never share tokens in chat again
+- **CRITICAL**: GitHub token was exposed in SESSION_STATE.md and committed to git
+  - Token has been REVOKED (user action completed)
+  - Token removed from all tracked files
+  - New token created and added to .env (NOT committed to git)
+  - Added .env to .gitignore to prevent future exposure
 
 ### Environment
 - `.env` file should be created by user manually
