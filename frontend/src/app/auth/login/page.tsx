@@ -12,6 +12,7 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -43,6 +44,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Theme Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <BackgroundGradientAnimation />
       <BackgroundBeams />
       

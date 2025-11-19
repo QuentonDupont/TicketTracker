@@ -11,6 +11,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react"
 import { toast } from "sonner"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -57,6 +58,11 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Theme Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <BackgroundGradientAnimation />
       <BackgroundBeams />
       

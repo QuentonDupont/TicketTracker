@@ -11,6 +11,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Mail, ArrowLeft, ArrowRight } from "lucide-react"
 import { toast } from "sonner"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -38,6 +39,11 @@ export default function ForgotPasswordPage() {
   if (isEmailSent) {
     return (
       <div className="min-h-screen relative overflow-hidden">
+        {/* Theme Toggle - Fixed Position */}
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
+
         <BackgroundGradientAnimation />
         <BackgroundBeams />
         
@@ -88,9 +94,14 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Theme Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <BackgroundGradientAnimation />
       <BackgroundBeams />
-      
+
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <Card className="w-full max-w-md backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
           <CardHeader className="space-y-1 text-center">

@@ -101,6 +101,7 @@ This is the primary development port for the Next.js frontend application. All f
 - **Inline Editing**: Edit ticket fields directly from detail view
 - **Kanban & List Views**: Toggle between different visualization modes
 - **Authentication**: JWT-based mock authentication with protected routes
+- **Light/Dark Theme**: Full light and dark mode support with theme toggle on all pages
 
 ## Development Commands
 
@@ -262,6 +263,19 @@ The MCP servers can be used for:
 - Implement inline editing for better UX
 - Toast notifications for user feedback (sonner library)
 - Protected routes require authentication via AuthContext
+
+### Theme Implementation
+- **Theme Provider**: Powered by `next-themes` library
+- **Light Mode**: Bright backgrounds with dark text (defined in `:root` CSS selector)
+- **Dark Mode**: Futuristic dark theme with cyan accents (defined in `.dark` CSS selector)
+- **Theme Toggle Location**:
+  - Main app pages: Top-right header (via `SiteHeader` component)
+  - Auth pages: Fixed position top-right corner
+  - Future pages: Automatically inherited via `MainLayout` wrapper
+- **Adding Theme Toggle to New Pages**:
+  - Authenticated pages: Use `MainLayout` component (auto-includes theme toggle)
+  - Auth/standalone pages: Add `<ThemeToggle />` in fixed position `<div className="fixed top-4 right-4 z-50">`
+- **Theme Persistence**: User preference saved to localStorage by `next-themes`
 
 ### Code Organization
 - Page components in `frontend/src/app/`
