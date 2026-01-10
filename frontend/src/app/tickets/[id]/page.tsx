@@ -44,6 +44,8 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { Ticket, Epic } from "@/types"
+import { LinkedTicketsCard } from "@/components/linked-tickets-card"
+import { TicketLinkModal } from "@/components/ticket-link-modal"
 
 const statusColors = {
   'To Do': 'bg-gray-500 text-white',
@@ -89,6 +91,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const [editedExpectedResults, setEditedExpectedResults] = useState('')
   const [newTag, setNewTag] = useState('')
   const [availableEpics, setAvailableEpics] = useState<Epic[]>([])
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
+  const [linkRefreshKey, setLinkRefreshKey] = useState(0)
 
   useEffect(() => {
     // Load ticket from localStorage
@@ -865,23 +869,24 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               </CardContent>
             </Card>
 
-            {/* Related Tickets - Placeholder */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Related Tickets</CardTitle>
-                <CardDescription className="text-xs">
-                  Similar or dependent tickets
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-4 text-sm text-muted-foreground">
-                  No related tickets
-                </div>
-              </CardContent>
-            </Card>
+            {/* Linked Tickets */}
+            <LinkedTicketsCard
+              ticketId={ticket.id}
+              onOpenLinkModal={() => setIsLinkModalOpen(true)}
+              onLinksChanged={() => setLinkRefreshKey(prev => prev + 1)}
+              key={linkRefreshKey}
+            />
           </div>
         </div>
       </div>
+
+      {/* Ticket Link Modal */}
+      <TicketLinkModal
+        open={isLinkModalOpen}
+        onOpenChange={setIsLinkModalOpen}
+        currentTicketId={ticket.id}
+        onLinkCreated={() => setLinkRefreshKey(prev => prev + 1)}
+      />
     </MainLayout>
   )
 }

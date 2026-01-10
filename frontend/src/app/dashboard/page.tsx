@@ -155,17 +155,17 @@ function MetricsGrid() {
         const IconComponent = metric.icon
         const TrendIcon = metric.trendIcon
         return (
-          <Card key={index} className="glass-dark card-hover hover-lift group">
+          <Card key={index} className="glass card-hover hover-lift group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white/90">{metric.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-foreground/90">{metric.title}</CardTitle>
               <div className={`p-2 rounded-lg bg-gradient-to-r ${metric.color} ${metric.glow} group-hover:scale-110 transition-transform duration-300`}>
                 <IconComponent className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-white mb-1">{metric.value}</div>
+              <div className="text-3xl font-bold text-foreground mb-1">{metric.value}</div>
               {metric.trend && TrendIcon && (
-                <p className="text-xs text-white/60 flex items-center">
+                <p className="text-xs text-muted-foreground/60 flex items-center">
                   <TrendIcon className="h-3 w-3 mr-1" />
                   {metric.trend} from last week
                 </p>
@@ -174,7 +174,7 @@ function MetricsGrid() {
                 <Progress value={metric.progress} className="mt-2" />
               )}
               {!metric.trend && !metric.progress && (
-                <p className="text-xs text-white/60">Active work items</p>
+                <p className="text-xs text-muted-foreground/60">Active work items</p>
               )}
             </CardContent>
           </Card>
@@ -186,13 +186,13 @@ function MetricsGrid() {
 
 function RecentActivityFeed() {
   return (
-    <Card className="col-span-1 glass-dark card-hover">
+    <Card className="col-span-1 glass card-hover">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Activity className="h-5 w-5 text-cyan-400" />
           Recent Activity
         </CardTitle>
-        <CardDescription className="text-white/70">
+        <CardDescription className="text-muted-foreground">
           Latest updates from your team and projects
         </CardDescription>
       </CardHeader>
@@ -202,14 +202,14 @@ function RecentActivityFeed() {
             const IconComponent = activity.icon
             return (
               <div key={activity.id} className="flex items-start space-x-3 group">
-                <div className={`p-2 rounded-full bg-white/10 ${activity.color} group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`p-2 rounded-full bg-muted ${activity.color} group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className="h-3 w-3" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none text-white">
+                  <p className="text-sm font-medium leading-none text-foreground">
                     {activity.message}
                   </p>
-                  <div className="flex items-center text-xs text-white/60">
+                  <div className="flex items-center text-xs text-muted-foreground/60">
                     <User className="h-3 w-3 mr-1" />
                     {activity.user} • {activity.timestamp}
                   </div>
@@ -219,7 +219,7 @@ function RecentActivityFeed() {
           })}
         </div>
         <div className="mt-4">
-          <Button variant="outline" className="w-full glass border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="w-full glass border-border hover:bg-muted">
             <ArrowRight className="h-4 w-4 mr-2" />
             View All Activity
           </Button>
@@ -231,13 +231,13 @@ function RecentActivityFeed() {
 
 function WeeklyProgressChart() {
   return (
-    <Card className="col-span-2 glass-dark card-hover">
+    <Card className="col-span-2 glass card-hover">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-foreground flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-cyan-400" />
           Weekly Progress
         </CardTitle>
-        <CardDescription className="text-white/70">
+        <CardDescription className="text-muted-foreground">
           Tickets created vs completed this week
         </CardDescription>
       </CardHeader>
@@ -272,13 +272,13 @@ function WeeklyProgressChart() {
 
 function PerformanceTrendChart() {
   return (
-    <Card className="col-span-1 glass-dark card-hover">
+    <Card className="col-span-1 glass card-hover">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-foreground flex items-center gap-2">
           <Zap className="h-5 w-5 text-purple-400" />
           Performance Trend
         </CardTitle>
-        <CardDescription className="text-white/70">
+        <CardDescription className="text-muted-foreground">
           Team efficiency over time
         </CardDescription>
       </CardHeader>
@@ -314,13 +314,13 @@ function PerformanceTrendChart() {
 
 function QuickActions() {
   return (
-    <Card className="glass-dark card-hover">
+    <Card className="glass card-hover">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Plus className="h-5 w-5 text-cyan-400" />
           Quick Actions
         </CardTitle>
-        <CardDescription className="text-white/70">
+        <CardDescription className="text-muted-foreground">
           Common tasks and shortcuts
         </CardDescription>
       </CardHeader>
@@ -330,15 +330,15 @@ function QuickActions() {
             <Plus className="h-4 w-4 mr-2" />
             Create New Ticket
           </Button>
-          <Button variant="outline" className="justify-start glass border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="justify-start glass border-border hover:bg-muted">
             <Calendar className="h-4 w-4 mr-2" />
             Schedule Meeting
           </Button>
-          <Button variant="outline" className="justify-start glass border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="justify-start glass border-border hover:bg-muted">
             <Users className="h-4 w-4 mr-2" />
             Add Team Member
           </Button>
-          <Button variant="outline" className="justify-start glass border-white/20 text-white hover:bg-white/10">
+          <Button variant="outline" className="justify-start glass border-border hover:bg-muted">
             <BarChart3 className="h-4 w-4 mr-2" />
             Generate Report
           </Button>
@@ -356,9 +356,9 @@ function AlertsAndNotifications() {
   ]
 
   return (
-    <Card className="glass-dark card-hover">
+    <Card className="glass card-hover">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Bell className="h-5 w-5 text-yellow-400" />
           Alerts & Notifications
         </CardTitle>
@@ -366,13 +366,13 @@ function AlertsAndNotifications() {
       <CardContent>
         <div className="space-y-3">
           {alerts.map((alert) => (
-            <div key={alert.id} className="flex items-center justify-between p-3 rounded-lg glass border-white/10 hover:bg-white/5 transition-colors">
+            <div key={alert.id} className="flex items-center justify-between p-3 rounded-lg glass border-border/50 hover:bg-muted/50 transition-colors">
               <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 rounded-full ${
                   alert.type === 'warning' ? 'bg-yellow-500' :
                   alert.type === 'info' ? 'bg-cyan-500' : 'bg-emerald-500'
                 }`} />
-                <span className="text-sm text-white/90">{alert.message}</span>
+                <span className="text-sm text-foreground/90">{alert.message}</span>
               </div>
               <Button variant="ghost" size="sm" className="text-xs text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10">
                 {alert.action}
@@ -400,12 +400,12 @@ export default function DashboardPage() {
                 <h1 className="text-4xl font-bold tracking-tight text-gradient text-glow">
                   Dashboard
                 </h1>
-                <p className="text-white/70 text-lg mt-2">
+                <p className="text-muted-foreground text-lg mt-2">
                   Welcome back! Here's what's happening with your projects.
                 </p>
               </div>
               <div className="flex items-center space-x-2">
-                <Badge variant="outline" className="flex items-center gap-1 glass border-white/20 text-white/90">
+                <Badge variant="outline" className="flex items-center gap-1 glass border-border">
                   <Clock className="h-3 w-3" />
                   Last updated: 2m ago
                 </Badge>

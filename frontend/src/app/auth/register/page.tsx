@@ -67,12 +67,12 @@ export default function RegisterPage() {
       <BackgroundBeams />
       
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
+        <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
               Create Account
             </CardTitle>
-            <CardDescription className="text-white/70">
+            <CardDescription className="text-muted-foreground">
               Join TicketTracker and start managing your projects
             </CardDescription>
           </CardHeader>
@@ -80,9 +80,9 @@ export default function RegisterPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-white/90">Full Name</Label>
+                <Label htmlFor="name" className="text-foreground/90">Full Name</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="name"
                     name="name"
@@ -90,16 +90,16 @@ export default function RegisterPage() {
                     placeholder="Enter your full name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-white/90">Email</Label>
+                <Label htmlFor="email" className="text-foreground/90">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="email"
                     name="email"
@@ -107,16 +107,16 @@ export default function RegisterPage() {
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-white/90">Password</Label>
+                <Label htmlFor="password" className="text-foreground/90">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="password"
                     name="password"
@@ -124,13 +124,13 @@ export default function RegisterPage() {
                     placeholder="Create a password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 pr-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-white/50 hover:text-white/80 transition-colors"
+                    className="absolute right-3 top-3 text-muted-foreground/50 hover:text-foreground/80 transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -138,9 +138,9 @@ export default function RegisterPage() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-white/90">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-foreground/90">Confirm Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -148,13 +148,13 @@ export default function RegisterPage() {
                     placeholder="Confirm your password"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 pr-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-white/50 hover:text-white/80 transition-colors"
+                    className="absolute right-3 top-3 text-muted-foreground/50 hover:text-foreground/80 transition-colors"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -168,7 +168,7 @@ export default function RegisterPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-border/30 border-t-white rounded-full animate-spin" />
                     <span>Creating account...</span>
                   </div>
                 ) : (
@@ -181,7 +181,7 @@ export default function RegisterPage() {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-white/70 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Already have an account?{' '}
                 <Link 
                   href="/auth/login" 

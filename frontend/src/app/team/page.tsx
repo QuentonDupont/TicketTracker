@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { MainLayout } from "@/components/layout/main-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -46,6 +47,9 @@ import {
   Shield,
   Briefcase
 } from "lucide-react"
+import { TeamMember } from '@/types'
+import { getTeamMembers, saveTeamMembers, updateTeamMemberField } from '@/lib/team-storage'
+import { toast } from 'sonner'
 
 // Mock data for team members
 const teamMembers = [
@@ -230,6 +234,8 @@ const performanceTrend = [
 ]
 
 function TeamHeader() {
+  const router = useRouter()
+
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -246,6 +252,14 @@ function TeamHeader() {
         <Button variant="outline" className="flex items-center gap-2">
           <Download className="h-4 w-4" />
           Export
+        </Button>
+        <Button
+          variant="outline"
+          className="flex items-center gap-2"
+          onClick={() => router.push('/team/settings/custom-fields')}
+        >
+          <Settings className="h-4 w-4" />
+          Custom Fields
         </Button>
         <Dialog>
           <DialogTrigger asChild>
@@ -364,10 +378,84 @@ function TeamOverview() {
 }
 
 function TeamDirectory() {
+  const router = useRouter()
+  const [members, setMembers] = useState<TeamMember[]>([])
+  const [editingField, setEditingField] = useState<{ memberId: number, field: string } | null>(null)
+  const [editValue, setEditValue] = useState('')
+
+  useEffect(() => {
+    // Load from localStorage
+    let loadedMembers = getTeamMembers()
+
+    // Initialize with mock data if empty
+    if (loadedMembers.length === 0) {
+      const initialMembers = teamMembers.map(m => ({
+        ...m,
+        createdDate: new Date().toISOString(),
+        lastModified: new Date().toISOString(),
+        customFieldValues: {}
+      }))
+      saveTeamMembers(initialMembers)
+      loadedMembers = initialMembers
+      toast.success('Team data initialized')
+    }
+
+    setMembers(loadedMembers)
+  }, [])
+
+  const handleViewMember = (memberId: number) => {
+    router.push(`/team/${memberId}`)
+  }
+
+  const handleFieldUpdate = (memberId: number, field: keyof TeamMember, value: any) => {
+    const member = members.find(m => m.id === memberId)
+    if (!member) return
+
+    // Update via storage helper
+    const updated = { [field]: value }
+    const result = updateTeamMemberField(memberId, field, value)
+
+    if (result) {
+      // Update local state
+      setMembers(members.map(m =>
+        m.id === memberId ? { ...m, [field]: value, lastModified: new Date().toISOString() } : m
+      ))
+      toast.success(`${field} updated`)
+    }
+  }
+
+  const startEditing = (memberId: number, field: string, currentValue: string) => {
+    setEditingField({ memberId, field })
+    setEditValue(currentValue)
+  }
+
+  const saveEdit = (memberId: number, field: keyof TeamMember) => {
+    if (!editValue.trim()) {
+      toast.error('Value cannot be empty')
+      return
+    }
+    handleFieldUpdate(memberId, field, editValue)
+    setEditingField(null)
+    setEditValue('')
+  }
+
+  const cancelEdit = () => {
+    setEditingField(null)
+    setEditValue('')
+  }
+
+  const isEditing = (memberId: number, field: string) => {
+    return editingField?.memberId === memberId && editingField?.field === field
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {teamMembers.map((member) => (
-        <Card key={member.id} className="hover:shadow-md transition-shadow">
+      {members.map((member) => (
+        <Card
+          key={member.id}
+          className="hover:shadow-md transition-shadow cursor-pointer"
+          onClick={() => handleViewMember(member.id)}
+        >
           <CardContent className="p-6">
             <div className="flex items-start space-x-4">
               <Avatar className="h-12 w-12">
@@ -376,22 +464,209 @@ function TeamDirectory() {
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-1">
-                <h3 className="font-medium leading-none">{member.name}</h3>
-                <p className="text-sm text-muted-foreground">{member.role}</p>
+                {/* Inline edit for name */}
+                {isEditing(member.id, 'name') ? (
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    <Input
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="h-7 text-sm"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveEdit(member.id, 'name')
+                        if (e.key === 'Escape') cancelEdit()
+                      }}
+                    />
+                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => saveEdit(member.id, 'name')}>
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={cancelEdit}>
+                      <span className="text-red-600">✕</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <h3
+                    className="font-medium leading-none hover:text-primary cursor-pointer transition-colors flex items-center gap-1 group"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      startEditing(member.id, 'name', member.name)
+                    }}
+                  >
+                    {member.name}
+                    <Edit className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                )}
+
+                {/* Auto-save dropdown for role */}
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Select
+                    value={member.role}
+                    onValueChange={(value) => handleFieldUpdate(member.id, 'role', value)}
+                  >
+                    <SelectTrigger className="h-7 text-sm border-none shadow-none hover:bg-muted transition-colors px-0">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Frontend Developer">Frontend Developer</SelectItem>
+                      <SelectItem value="Senior Frontend Developer">Senior Frontend Developer</SelectItem>
+                      <SelectItem value="Backend Developer">Backend Developer</SelectItem>
+                      <SelectItem value="Senior Backend Developer">Senior Backend Developer</SelectItem>
+                      <SelectItem value="Full Stack Developer">Full Stack Developer</SelectItem>
+                      <SelectItem value="DevOps Engineer">DevOps Engineer</SelectItem>
+                      <SelectItem value="UI/UX Designer">UI/UX Designer</SelectItem>
+                      <SelectItem value="QA Engineer">QA Engineer</SelectItem>
+                      <SelectItem value="Senior QA Engineer">Senior QA Engineer</SelectItem>
+                      <SelectItem value="Product Manager">Product Manager</SelectItem>
+                      <SelectItem value="Tech Lead">Tech Lead</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                   <MapPin className="h-3 w-3" />
                   <span>{member.location}</span>
                 </div>
               </div>
-              <Badge
-                variant={member.skillLevel === 'senior' ? 'default' :
-                        member.skillLevel === 'mid' ? 'secondary' : 'outline'}
-              >
-                {member.skillLevel}
-              </Badge>
+
+              {/* Auto-save dropdown for skill level */}
+              <div onClick={(e) => e.stopPropagation()}>
+                <Select
+                  value={member.skillLevel}
+                  onValueChange={(value) => handleFieldUpdate(member.id, 'skillLevel', value)}
+                >
+                  <SelectTrigger className="border-none shadow-none p-0">
+                    <Badge
+                      variant={member.skillLevel === 'senior' ? 'default' :
+                              member.skillLevel === 'mid' ? 'secondary' : 'outline'}
+                      className="cursor-pointer hover:opacity-80 transition-opacity"
+                    >
+                      {member.skillLevel}
+                    </Badge>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="senior">Senior</SelectItem>
+                    <SelectItem value="mid">Mid</SelectItem>
+                    <SelectItem value="junior">Junior</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="mt-4 space-y-3">
+              {/* Status and Department Row */}
+              <div className="flex items-center gap-2 text-xs border-b pb-3">
+                {/* Auto-save status toggle */}
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Select
+                    value={member.status}
+                    onValueChange={(value) => handleFieldUpdate(member.id, 'status', value)}
+                  >
+                    <SelectTrigger className="border-none shadow-none p-0 h-auto">
+                      <Badge
+                        variant={member.status === 'active' ? 'default' : 'secondary'}
+                        className="cursor-pointer hover:opacity-80 transition-opacity"
+                      >
+                        {member.status}
+                      </Badge>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <span className="text-muted-foreground">•</span>
+
+                {/* Auto-save department dropdown */}
+                <div onClick={(e) => e.stopPropagation()}>
+                  <Select
+                    value={member.department}
+                    onValueChange={(value) => handleFieldUpdate(member.id, 'department', value)}
+                  >
+                    <SelectTrigger className="h-6 text-xs border-none shadow-none hover:bg-muted transition-colors px-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Engineering">Engineering</SelectItem>
+                      <SelectItem value="Design">Design</SelectItem>
+                      <SelectItem value="Product">Product</SelectItem>
+                      <SelectItem value="Quality Assurance">Quality Assurance</SelectItem>
+                      <SelectItem value="DevOps">DevOps</SelectItem>
+                      <SelectItem value="Marketing">Marketing</SelectItem>
+                      <SelectItem value="Sales">Sales</SelectItem>
+                      <SelectItem value="Operations">Operations</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Email inline edit */}
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <Mail className="h-3 w-3 text-muted-foreground" />
+                {isEditing(member.id, 'email') ? (
+                  <div className="flex items-center gap-1 flex-1">
+                    <Input
+                      type="email"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="h-6 text-xs"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveEdit(member.id, 'email')
+                        if (e.key === 'Escape') cancelEdit()
+                      }}
+                    />
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => saveEdit(member.id, 'email')}>
+                      <CheckCircle className="h-3 w-3 text-green-600" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={cancelEdit}>
+                      <span className="text-red-600 text-xs">✕</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <span
+                    className="text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors flex-1"
+                    onClick={() => startEditing(member.id, 'email', member.email)}
+                  >
+                    {member.email}
+                  </span>
+                )}
+              </div>
+
+              {/* Phone inline edit */}
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <Phone className="h-3 w-3 text-muted-foreground" />
+                {isEditing(member.id, 'phone') ? (
+                  <div className="flex items-center gap-1 flex-1">
+                    <Input
+                      type="tel"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="h-6 text-xs"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveEdit(member.id, 'phone')
+                        if (e.key === 'Escape') cancelEdit()
+                      }}
+                    />
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => saveEdit(member.id, 'phone')}>
+                      <CheckCircle className="h-3 w-3 text-green-600" />
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={cancelEdit}>
+                      <span className="text-red-600 text-xs">✕</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <span
+                    className="text-xs text-muted-foreground hover:text-primary cursor-pointer transition-colors flex-1"
+                    onClick={() => startEditing(member.id, 'phone', member.phone)}
+                  >
+                    {member.phone}
+                  </span>
+                )}
+              </div>
+
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Performance</span>
                 <span className="text-sm text-muted-foreground">{member.performanceScore}%</span>
@@ -427,13 +702,31 @@ function TeamDirectory() {
               </div>
 
               <div className="flex justify-end space-x-1 pt-2">
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleViewMember(member.id)
+                  }}
+                >
                   <Eye className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleViewMember(member.id)
+                  }}
+                >
                   <Edit className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </div>

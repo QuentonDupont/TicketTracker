@@ -53,51 +53,51 @@ export default function LoginPage() {
       <BackgroundBeams />
       
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
+        <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-white/70">
+            <CardDescription className="text-muted-foreground">
               Sign in to your TicketTracker account
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-white/90">Email</Label>
+                <Label htmlFor="email" className="text-foreground/90">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 bg-card/50 border-border text-foreground placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-white/90">Password</Label>
+                <Label htmlFor="password" className="text-foreground/90">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 pr-10 bg-card/50 border-border text-foreground placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-white/50 hover:text-white/80 transition-colors"
+                    className="absolute right-3 top-3 text-muted-foreground/50 hover:text-foreground/80 transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -120,7 +120,7 @@ export default function LoginPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-border/30 border-t-white rounded-full animate-spin" />
                     <span>Signing in...</span>
                   </div>
                 ) : (
@@ -131,12 +131,12 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
-            
+
             <div className="mt-6 text-center">
-              <p className="text-white/70 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Don't have an account?{' '}
-                <Link 
-                  href="/auth/register" 
+                <Link
+                  href="/auth/register"
                   className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium"
                 >
                   Create one

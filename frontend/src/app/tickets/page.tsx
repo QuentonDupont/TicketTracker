@@ -32,9 +32,29 @@ import {
   Settings,
   Eye,
   Edit,
-  Trash2
+  Trash2,
+  GripVertical
 } from "lucide-react"
 import { toast } from "sonner"
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCorners,
+  DragOverEvent,
+  useDroppable,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface Ticket {
   id: number
@@ -145,13 +165,211 @@ const priorityColors = {
   'High': 'bg-red-100 text-red-800 border-red-200'
 }
 
-function KanbanBoard({ tickets, onEdit, onDelete, onView }: {
+// Droppable Column Component
+function DroppableColumn({
+  status,
+  title,
+  color,
+  children,
+  count
+}: {
+  status: string
+  title: string
+  color: string
+  children: React.ReactNode
+  count: number
+}) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: status,
+  })
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`border rounded-lg p-4 ${color} w-80 flex-shrink-0 min-h-[200px] transition-all ${
+        isOver ? 'ring-2 ring-cyan-500 bg-cyan-50/50 dark:bg-cyan-950/50 scale-[1.02]' : ''
+      }`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold flex items-center gap-2">
+          {title}
+          <Badge variant="secondary" className="text-xs">
+            {count}
+          </Badge>
+        </h3>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+// Draggable Ticket Card Component
+function DraggableTicketCard({ ticket, onEdit, onDelete, isDragging }: {
+  ticket: Ticket
+  onEdit: (ticket: Ticket) => void
+  onDelete: (ticketId: number) => void
+  isDragging?: boolean
+}) {
+  const router = useRouter()
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging: isSortableDragging,
+  } = useSortable({ id: ticket.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isSortableDragging ? 0.5 : 1,
+  }
+
+  const isOverdue = (dueDate: string, status: string) => {
+    if (status === 'Live' || status === 'Ready to Release') return false
+    const due = new Date(dueDate)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return due < today
+  }
+
+  return (
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className={`cursor-pointer hover:shadow-md transition-shadow ${isSortableDragging ? 'shadow-lg ring-2 ring-cyan-500' : ''}`}
+      onClick={() => router.push(`/tickets/${ticket.id}`)}
+    >
+      <CardContent className="p-4">
+        <div className="space-y-3">
+          <div className="flex items-start justify-between gap-2">
+            {/* Drag Handle */}
+            <button
+              className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground mt-0.5"
+              {...attributes}
+              {...listeners}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <GripVertical className="h-4 w-4" />
+            </button>
+
+            <Link
+              href={`/tickets/${ticket.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="font-medium text-sm leading-tight hover:text-cyan-400 hover:underline transition-colors flex-1"
+            >
+              {ticket.title}
+            </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 flex-shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push(`/tickets/${ticket.id}`)
+                  }}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  View Details
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onEdit(ticket)
+                  }}
+                >
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit Ticket
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDelete(ticket.id)
+                  }}
+                  className="text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <p className="text-xs text-muted-foreground line-clamp-2 pl-6">
+            {ticket.description}
+          </p>
+
+          <div className="flex items-center justify-between pl-6">
+            <Badge className={priorityColors[ticket.priority]} variant="outline">
+              {ticket.priority}
+            </Badge>
+            {isOverdue(ticket.due_date, ticket.status) && (
+              <Badge variant="destructive" className="text-xs">
+                Overdue
+              </Badge>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between text-xs text-muted-foreground pl-6">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              {new Date(ticket.due_date).toLocaleDateString()}
+            </div>
+            {ticket.assignee && (
+              <span className="truncate max-w-20">
+                {ticket.assignee}
+              </span>
+            )}
+          </div>
+
+          {ticket.tags && ticket.tags.length > 0 && (
+            <div className="flex gap-1 flex-wrap pl-6">
+              {ticket.tags.slice(0, 2).map((tag, index) => (
+                <Badge key={index} variant="secondary" className="text-xs px-1 py-0">
+                  {tag}
+                </Badge>
+              ))}
+              {ticket.tags.length > 2 && (
+                <Badge variant="secondary" className="text-xs px-1 py-0">
+                  +{ticket.tags.length - 2}
+                </Badge>
+              )}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function KanbanBoard({ tickets, onEdit, onDelete, onView, onStatusChange }: {
   tickets: Ticket[]
   onEdit: (ticket: Ticket) => void
   onDelete: (ticketId: number) => void
   onView: (ticket: Ticket) => void
+  onStatusChange: (ticketId: number, newStatus: Ticket['status']) => void
 }) {
-  const router = useRouter()
+  const [activeId, setActiveId] = useState<number | null>(null)
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px of movement before drag starts
+      },
+    })
+  )
+
   const columns = [
     { status: 'To Do' as const, title: 'To Do', color: 'border-gray-200' },
     { status: 'In Progress' as const, title: 'In Progress', color: 'border-blue-200' },
@@ -166,143 +384,121 @@ function KanbanBoard({ tickets, onEdit, onDelete, onView }: {
     return tickets.filter(ticket => ticket.status === status)
   }
 
-  const isOverdue = (dueDate: string, status: string) => {
-    if (status === 'Live' || status === 'Ready to Release') return false
-    const due = new Date(dueDate)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    return due < today
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as number)
   }
 
+  const handleDragOver = (event: DragOverEvent) => {
+    const { over } = event
+    if (!over) return
+
+    // Visual feedback is handled by DroppableColumn's isOver state
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    setActiveId(null)
+
+    if (!over) return
+
+    const ticketId = active.id as number
+    const activeTicket = tickets.find(t => t.id === ticketId)
+
+    if (!activeTicket) return
+
+    // Determine if we're dropping on a column or another ticket
+    // Column IDs are status strings, ticket IDs are numbers
+    const overId = over.id
+
+    // Check if overId is a valid status (column drop)
+    const isColumnDrop = columns.some(col => col.status === overId)
+
+    if (isColumnDrop) {
+      // Dropped on a column - change status
+      const newStatus = overId as Ticket['status']
+      if (activeTicket.status !== newStatus) {
+        onStatusChange(ticketId, newStatus)
+        toast.success(`Ticket moved to ${newStatus}`)
+      }
+    } else {
+      // Dropped on another ticket - find which column it belongs to
+      const overTicket = tickets.find(t => t.id === overId)
+      if (overTicket && activeTicket.status !== overTicket.status) {
+        // Change to the same status as the ticket we dropped on
+        onStatusChange(ticketId, overTicket.status)
+        toast.success(`Ticket moved to ${overTicket.status}`)
+      }
+    }
+  }
+
+  const activeTicket = activeId ? tickets.find(t => t.id === activeId) : null
+
   return (
-    <div className="overflow-x-auto pb-4">
-      <div className="flex gap-4 min-w-max">
-      {columns.map((column) => {
-        const columnTickets = getTicketsByStatus(column.status)
-        return (
-          <div key={column.status} className={`border rounded-lg p-4 ${column.color} w-80 flex-shrink-0`}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold flex items-center gap-2">
-                {column.title}
-                <Badge variant="secondary" className="text-xs">
-                  {columnTickets.length}
-                </Badge>
-              </h3>
-            </div>
-
-            <div className="space-y-3">
-              {columnTickets.map((ticket) => (
-                <Card
-                  key={ticket.id}
-                  className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => router.push(`/tickets/${ticket.id}`)}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="overflow-x-auto pb-4">
+        <div className="flex gap-4 min-w-max">
+          {columns.map((column) => {
+            const columnTickets = getTicketsByStatus(column.status)
+            return (
+              <SortableContext
+                key={column.status}
+                id={column.status}
+                items={columnTickets.map(t => t.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <DroppableColumn
+                  status={column.status}
+                  title={column.title}
+                  color={column.color}
+                  count={columnTickets.length}
                 >
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between">
-                        <Link
-                          href={`/tickets/${ticket.id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="font-medium text-sm leading-tight hover:text-cyan-400 hover:underline transition-colors"
-                        >
-                          {ticket.title}
-                        </Link>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                router.push(`/tickets/${ticket.id}`)
-                              }}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onEdit(ticket)
-                              }}
-                            >
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Ticket
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onDelete(ticket.id)
-                              }}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {ticket.description}
-                      </p>
-
-                      <div className="flex items-center justify-between">
-                        <Badge className={priorityColors[ticket.priority]} variant="outline">
-                          {ticket.priority}
-                        </Badge>
-                        {isOverdue(ticket.due_date, ticket.status) && (
-                          <Badge variant="destructive" className="text-xs">
-                            Overdue
-                          </Badge>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(ticket.due_date).toLocaleDateString()}
-                        </div>
-                        {ticket.assignee && (
-                          <span className="truncate max-w-20">
-                            {ticket.assignee}
-                          </span>
-                        )}
-                      </div>
-
-                      {ticket.tags && ticket.tags.length > 0 && (
-                        <div className="flex gap-1 flex-wrap">
-                          {ticket.tags.slice(0, 2).map((tag, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs px-1 py-0">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {ticket.tags.length > 2 && (
-                            <Badge variant="secondary" className="text-xs px-1 py-0">
-                              +{ticket.tags.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )
-      })}
+                  <div className="space-y-3">
+                    {columnTickets.map((ticket) => (
+                      <DraggableTicketCard
+                        key={ticket.id}
+                        ticket={ticket}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                    ))}
+                  </div>
+                </DroppableColumn>
+              </SortableContext>
+            )
+          })}
+        </div>
       </div>
-    </div>
+
+      {/* Drag Overlay */}
+      <DragOverlay>
+        {activeTicket ? (
+          <Card className="cursor-grabbing shadow-2xl ring-2 ring-cyan-500 w-80">
+            <CardContent className="p-4">
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <GripVertical className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <div className="font-medium text-sm leading-tight flex-1">
+                    {activeTicket.title}
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground line-clamp-2 pl-6">
+                  {activeTicket.description}
+                </p>
+                <Badge className={priorityColors[activeTicket.priority]} variant="outline">
+                  {activeTicket.priority}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   )
 }
 
@@ -426,6 +622,12 @@ export default function TicketsPage() {
     router.push(`/tickets/${ticket.id}`)
   }
 
+  const handleStatusChange = (ticketId: number, newStatus: Ticket['status']) => {
+    setTickets(prev => prev.map(t =>
+      t.id === ticketId ? { ...t, status: newStatus } : t
+    ))
+  }
+
   const handleBulkAction = (action: string) => {
     // Placeholder for bulk actions
     toast.info(`Bulk ${action} action triggered`)
@@ -527,6 +729,7 @@ export default function TicketsPage() {
               onEdit={handleEditTicket}
               onDelete={handleDeleteTicket}
               onView={handleViewTicket}
+              onStatusChange={handleStatusChange}
             />
           )}
         </div>

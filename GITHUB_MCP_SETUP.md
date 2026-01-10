@@ -66,7 +66,7 @@ The GitHub MCP (Model Context Protocol) server enables AI-powered automation for
 
 3. **Add your GitHub token**:
    ```env
-   GITHUB_TOKEN=ghp_your_actual_token_here_replace_this_text
+   GITHUB_TOKEN=your_github_personal_access_token_here
    ```
 
 4. **Save and close** the file

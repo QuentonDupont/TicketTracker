@@ -210,17 +210,17 @@ function DashboardMetrics({ tickets }: { tickets: Ticket[] }) {
       {metrics.map((metric, index) => {
         const IconComponent = metric.icon
         return (
-          <Card key={index} className="glass-dark card-hover hover-lift group">
+          <Card key={index} className="glass card-hover hover-lift group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white/90">{metric.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-foreground/90">{metric.title}</CardTitle>
               <div className={`p-2 rounded-lg bg-gradient-to-r ${metric.color} ${metric.glow} group-hover:scale-110 transition-transform duration-300`}>
-                <IconComponent className="h-4 w-4 text-white" />
+                <IconComponent className="h-4 w-4 text-foreground" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-white mb-1">{metric.value}</div>
-              <p className="text-xs text-white/60">Active work items</p>
-              <div className="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
+              <div className="text-3xl font-bold text-foreground mb-1">{metric.value}</div>
+              <p className="text-xs text-muted-foreground/60">Active work items</p>
+              <div className="mt-2 h-1 bg-muted rounded-full overflow-hidden">
                 <div 
                   className={`h-full bg-gradient-to-r ${metric.color} transition-all duration-1000 ease-out`}
                   style={{ width: `${(metric.value / Math.max(...metrics.map(m => m.value))) * 100}%` }}
@@ -249,9 +249,9 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <Card className="glass-dark card-hover">
+      <Card className="glass card-hover">
         <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
+          <CardTitle className="text-foreground flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-cyan-400" />
             Tickets by Status
           </CardTitle>
@@ -287,9 +287,9 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
         </CardContent>
       </Card>
 
-      <Card className="glass-dark card-hover">
+      <Card className="glass card-hover">
         <CardHeader>
-          <CardTitle className="text-white flex items-center gap-2">
+          <CardTitle className="text-foreground flex items-center gap-2">
             <Zap className="h-5 w-5 text-purple-400" />
             Tickets by Priority
           </CardTitle>
@@ -320,32 +320,32 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
 
 function TicketTable() {
   return (
-    <Card className="glass-dark card-hover">
+    <Card className="glass card-hover">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-foreground flex items-center gap-2">
           <Target className="h-5 w-5 text-cyan-400" />
           Recent Tickets
         </CardTitle>
-        <CardDescription className="text-white/70">Latest tickets in the system</CardDescription>
+        <CardDescription className="text-muted-foreground">Latest tickets in the system</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow className="border-white/10">
-              <TableHead className="text-white/90">Title</TableHead>
-              <TableHead className="text-white/90">Status</TableHead>
-              <TableHead className="text-white/90">Priority</TableHead>
-              <TableHead className="text-white/90">Due Date</TableHead>
-              <TableHead className="text-white/90">Actions</TableHead>
+            <TableRow className="border-border/50">
+              <TableHead className="text-foreground/90">Title</TableHead>
+              <TableHead className="text-foreground/90">Status</TableHead>
+              <TableHead className="text-foreground/90">Priority</TableHead>
+              <TableHead className="text-foreground/90">Due Date</TableHead>
+              <TableHead className="text-foreground/90">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {initialMockTickets.map((ticket) => (
-              <TableRow key={ticket.id} className="border-white/10 hover:bg-white/5 transition-colors">
+              <TableRow key={ticket.id} className="border-border/50 hover:bg-muted/50 transition-colors">
                 <TableCell>
                   <div>
-                    <div className="font-medium text-white">{ticket.title}</div>
-                    <div className="text-sm text-white/60">{ticket.description}</div>
+                    <div className="font-medium text-foreground">{ticket.title}</div>
+                    <div className="text-sm text-muted-foreground/60">{ticket.description}</div>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -358,7 +358,7 @@ function TicketTable() {
                     {ticket.priority}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-white/90">{new Date(ticket.due_date).toLocaleDateString()}</TableCell>
+                <TableCell className="text-foreground/90">{new Date(ticket.due_date).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <Button variant="ghost" size="sm" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10">
                     Edit
@@ -375,43 +375,43 @@ function TicketTable() {
 
 function ProjectTable() {
   return (
-    <Card className="glass-dark card-hover">
+    <Card className="glass card-hover">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-foreground flex items-center gap-2">
           <DollarSign className="h-5 w-5 text-purple-400" />
           Active Projects
         </CardTitle>
-        <CardDescription className="text-white/70">Current projects in development</CardDescription>
+        <CardDescription className="text-muted-foreground">Current projects in development</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow className="border-white/10">
-              <TableHead className="text-white/90">Project Name</TableHead>
-              <TableHead className="text-white/90">Manager</TableHead>
-              <TableHead className="text-white/90">Budget</TableHead>
-              <TableHead className="text-white/90">Timeline</TableHead>
-              <TableHead className="text-white/90">Status</TableHead>
+            <TableRow className="border-border/50">
+              <TableHead className="text-foreground/90">Project Name</TableHead>
+              <TableHead className="text-foreground/90">Manager</TableHead>
+              <TableHead className="text-foreground/90">Budget</TableHead>
+              <TableHead className="text-foreground/90">Timeline</TableHead>
+              <TableHead className="text-foreground/90">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {mockProjects.map((project) => (
-              <TableRow key={project.id} className="border-white/10 hover:bg-white/5 transition-colors">
+              <TableRow key={project.id} className="border-border/50 hover:bg-muted/50 transition-colors">
                 <TableCell>
                   <div>
-                    <div className="font-medium text-white">{project.name}</div>
-                    <div className="text-sm text-white/60">{project.description}</div>
+                    <div className="font-medium text-foreground">{project.name}</div>
+                    <div className="text-sm text-muted-foreground/60">{project.description}</div>
                   </div>
                 </TableCell>
-                <TableCell className="flex items-center gap-2 text-white/90">
+                <TableCell className="flex items-center gap-2 text-foreground/90">
                   <User className="h-4 w-4" />
                   {project.manager}
                 </TableCell>
-                <TableCell className="flex items-center gap-2 text-white/90">
+                <TableCell className="flex items-center gap-2 text-foreground/90">
                   <DollarSign className="h-4 w-4" />
                   ${project.budget.toLocaleString()}
                 </TableCell>
-                <TableCell className="flex items-center gap-2 text-white/90">
+                <TableCell className="flex items-center gap-2 text-foreground/90">
                   <Calendar className="h-4 w-4" />
                   {new Date(project.start_date).toLocaleDateString()} - {new Date(project.end_date).toLocaleDateString()}
                 </TableCell>
@@ -431,34 +431,34 @@ function ProjectTable() {
 
 function TeamTable() {
   return (
-    <Card className="glass-dark card-hover">
+    <Card className="glass card-hover">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-foreground flex items-center gap-2">
           <User className="h-5 w-5 text-cyan-400" />
           Team Members
         </CardTitle>
-        <CardDescription className="text-white/70">Development team and their availability</CardDescription>
+        <CardDescription className="text-muted-foreground">Development team and their availability</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow className="border-white/10">
-              <TableHead className="text-white/90">Name</TableHead>
-              <TableHead className="text-white/90">Role</TableHead>
-              <TableHead className="text-white/90">Skills</TableHead>
-              <TableHead className="text-white/90">Availability</TableHead>
-              <TableHead className="text-white/90">Rate</TableHead>
+            <TableRow className="border-border/50">
+              <TableHead className="text-foreground/90">Name</TableHead>
+              <TableHead className="text-foreground/90">Role</TableHead>
+              <TableHead className="text-foreground/90">Skills</TableHead>
+              <TableHead className="text-foreground/90">Availability</TableHead>
+              <TableHead className="text-foreground/90">Rate</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {mockTeamMembers.map((member) => (
-              <TableRow key={member.id} className="border-white/10 hover:bg-white/5 transition-colors">
-                <TableCell className="font-medium text-white">{member.name}</TableCell>
-                <TableCell className="text-white/90">{member.role}</TableCell>
+              <TableRow key={member.id} className="border-border/50 hover:bg-muted/50 transition-colors">
+                <TableCell className="font-medium text-foreground">{member.name}</TableCell>
+                <TableCell className="text-foreground/90">{member.role}</TableCell>
                 <TableCell>
                   <div className="flex gap-1 flex-wrap">
                     {member.skills.map((skill, index) => (
-                      <Badge key={index} className="bg-white/10 text-white/80 border-white/20 text-xs">
+                      <Badge key={index} className="bg-muted text-foreground/80 border-border text-xs">
                         {skill}
                       </Badge>
                     ))}
@@ -467,10 +467,10 @@ function TeamTable() {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Progress value={member.availability} className="w-16" />
-                    <span className="text-sm text-white/90">{member.availability}%</span>
+                    <span className="text-sm text-foreground/90">{member.availability}%</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-white/90">${member.cost_rate}/hr</TableCell>
+                <TableCell className="text-foreground/90">${member.cost_rate}/hr</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -528,20 +528,20 @@ export function ProjectDashboard() {
           <h1 className="text-4xl font-bold tracking-tight text-gradient text-glow">
             Project Management Dashboard
           </h1>
-          <p className="text-white/70 text-lg mt-2">
+          <p className="text-muted-foreground text-lg mt-2">
             Track your projects, tickets, and team performance with advanced analytics
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-medium px-6 py-2.5 glow-gradient hover-lift btn-glow">
+            <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-foreground font-medium px-6 py-2.5 glow-gradient hover-lift btn-glow">
               <Plus className="h-4 w-4 mr-2" />
               Add New Ticket
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl glass-dark border-white/20">
+          <DialogContent className="max-w-2xl glass border-border">
             <DialogHeader>
-              <DialogTitle className="text-white">Create New Ticket</DialogTitle>
+              <DialogTitle className="text-foreground">Create New Ticket</DialogTitle>
             </DialogHeader>
             <TicketForm onSubmit={handleCreateTicket} mode="create" />
           </DialogContent>
@@ -556,14 +556,14 @@ export function ProjectDashboard() {
 
       {/* Tabs for different sections */}
       <Tabs defaultValue="tickets" className="space-y-6">
-        <TabsList className="glass-dark border-white/20">
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
+        <TabsList className="glass border-border">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
             Tickets
           </TabsTrigger>
-          <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
             Projects
           </TabsTrigger>
-          <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-white">
+          <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
             Team
           </TabsTrigger>
         </TabsList>
@@ -588,9 +588,9 @@ export function ProjectDashboard() {
 
       {/* Edit Ticket Dialog */}
       <Dialog open={!!editingTicket} onOpenChange={(open) => !open && setEditingTicket(null)}>
-        <DialogContent className="max-w-2xl glass-dark border-white/20">
+        <DialogContent className="max-w-2xl glass border-border">
           <DialogHeader>
-            <DialogTitle className="text-white">Edit Ticket</DialogTitle>
+            <DialogTitle className="text-foreground">Edit Ticket</DialogTitle>
           </DialogHeader>
           {editingTicket && (
             <TicketForm
@@ -604,14 +604,14 @@ export function ProjectDashboard() {
 
       {/* View Ticket Dialog */}
       <Dialog open={!!viewingTicket} onOpenChange={(open) => !open && setViewingTicket(null)}>
-        <DialogContent className="max-w-2xl glass-dark border-white/20">
+        <DialogContent className="max-w-2xl glass border-border">
           <DialogHeader>
-            <DialogTitle className="text-white">Ticket Details</DialogTitle>
+            <DialogTitle className="text-foreground">Ticket Details</DialogTitle>
           </DialogHeader>
           {viewingTicket && (
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <h3 className="text-xl font-semibold text-white">{viewingTicket.title}</h3>
+                <h3 className="text-xl font-semibold text-foreground">{viewingTicket.title}</h3>
                 <Badge className={`${statusColors[viewingTicket.status]} border`}>
                   {viewingTicket.status}
                 </Badge>
@@ -621,36 +621,36 @@ export function ProjectDashboard() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-white/90">Description</Label>
-                <p className="text-sm text-white/80 bg-white/5 p-3 rounded border border-white/10">
+                <Label className="text-foreground/90">Description</Label>
+                <p className="text-sm text-foreground/80 bg-muted/50 p-3 rounded border border-border/50">
                   {viewingTicket.description}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-white/90">Due Date</Label>
-                  <p className="text-sm text-white/80">{new Date(viewingTicket.due_date).toLocaleDateString()}</p>
+                  <Label className="text-foreground/90">Due Date</Label>
+                  <p className="text-sm text-foreground/80">{new Date(viewingTicket.due_date).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <Label className="text-white/90">Created Date</Label>
-                  <p className="text-sm text-white/80">{new Date(viewingTicket.created_date).toLocaleDateString()}</p>
+                  <Label className="text-foreground/90">Created Date</Label>
+                  <p className="text-sm text-foreground/80">{new Date(viewingTicket.created_date).toLocaleDateString()}</p>
                 </div>
               </div>
 
               {viewingTicket.assignee && (
                 <div>
-                  <Label className="text-white/90">Assignee</Label>
-                  <p className="text-sm text-white/80">{viewingTicket.assignee}</p>
+                  <Label className="text-foreground/90">Assignee</Label>
+                  <p className="text-sm text-foreground/80">{viewingTicket.assignee}</p>
                 </div>
               )}
 
               {viewingTicket.tags && viewingTicket.tags.length > 0 && (
                 <div>
-                  <Label className="text-white/90">Tags</Label>
+                  <Label className="text-foreground/90">Tags</Label>
                   <div className="flex gap-2 mt-1">
                     {viewingTicket.tags.map((tag, index) => (
-                      <Badge key={index} className="bg-white/10 text-white/80 border-white/20">
+                      <Badge key={index} className="bg-muted text-foreground/80 border-border">
                         {tag}
                       </Badge>
                     ))}

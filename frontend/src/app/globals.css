@@ -127,13 +127,13 @@
     background-attachment: fixed;
   }
 
-  /* Glassmorphism utilities */
+  /* Glassmorphism utilities - Theme-aware */
   .glass {
-    @apply backdrop-blur-xl bg-white/10 border border-white/20;
+    @apply backdrop-blur-xl bg-card/50 border border-border;
   }
-  
+
   .glass-dark {
-    @apply backdrop-blur-xl bg-black/20 border border-white/10;
+    @apply backdrop-blur-xl bg-card/50 border border-border;
   }
 
   /* Glow effects */
@@ -149,11 +149,15 @@
     box-shadow: 0 0 30px rgba(34, 211, 238, 0.2), 0 0 60px rgba(147, 51, 234, 0.2);
   }
 
-  /* Animated gradients */
+  /* Animated gradients - Theme-aware */
   .gradient-animated {
-    background: linear-gradient(-45deg, #0f0f23, #1a1a2e, #16213e, #0f0f23);
+    background: linear-gradient(-45deg, #f8f9fa, #e9ecef, #dee2e6, #f8f9fa);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
+  }
+
+  .dark .gradient-animated {
+    background: linear-gradient(-45deg, #0f0f23, #1a1a2e, #16213e, #0f0f23);
   }
 
   @keyframes gradientShift {

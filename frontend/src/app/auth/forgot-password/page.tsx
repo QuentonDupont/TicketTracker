@@ -48,12 +48,12 @@ export default function ForgotPasswordPage() {
         <BackgroundBeams />
         
         <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-          <Card className="w-full max-w-md backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
+          <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
             <CardHeader className="space-y-1 text-center">
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                 Check Your Email
               </CardTitle>
-              <CardDescription className="text-white/70">
+              <CardDescription className="text-muted-foreground">
                 We've sent password reset instructions to {email}
               </CardDescription>
             </CardHeader>
@@ -63,7 +63,7 @@ export default function ForgotPasswordPage() {
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center">
                   <Mail className="h-8 w-8 text-white" />
                 </div>
-                <p className="text-white/80 text-sm">
+                <p className="text-foreground/80 text-sm">
                   Didn't receive the email? Check your spam folder or{' '}
                   <button 
                     onClick={() => setIsEmailSent(false)}
@@ -103,12 +103,12 @@ export default function ForgotPasswordPage() {
       <BackgroundBeams />
 
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
+        <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
               Forgot Password
             </CardTitle>
-            <CardDescription className="text-white/70">
+            <CardDescription className="text-muted-foreground">
               Enter your email address and we'll send you reset instructions
             </CardDescription>
           </CardHeader>
@@ -116,16 +116,16 @@ export default function ForgotPasswordPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-white/90">Email</Label>
+                <Label htmlFor="email" className="text-foreground/90">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-white/50" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
                     required
                   />
                 </div>
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-border/30 border-t-white rounded-full animate-spin" />
                     <span>Sending...</span>
                   </div>
                 ) : (
