@@ -66,7 +66,7 @@ const initialEpics: Epic[] = [
     title: "Q1 Platform Modernization",
     description: "Upgrade core platform infrastructure and migrate to cloud-native architecture",
     status: "In Progress",
-    color: "#22d3ee",
+    color: "#3b82f6",
     start_date: new Date().toISOString().split('T')[0],
     end_date: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     owner: "Alice Johnson",
@@ -77,7 +77,7 @@ const initialEpics: Epic[] = [
     title: "Mobile App Launch",
     description: "Design and develop native mobile applications for iOS and Android",
     status: "Planning",
-    color: "#a855f7",
+    color: "#1e40af",
     start_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     owner: "Bob Wilson",
@@ -185,7 +185,7 @@ export default function EpicsPage() {
       <MainLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="flex flex-col items-center space-y-4">
-            <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-muted-foreground">Loading epics...</p>
           </div>
         </div>
@@ -206,7 +206,7 @@ export default function EpicsPage() {
           </div>
           <Button
             onClick={() => setShowNewEpicDialog(true)}
-            className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
           >
             <Plus className="h-4 w-4 mr-2" />
             New Epic
@@ -280,9 +280,9 @@ export default function EpicsPage() {
                         <Link
                           href={`/epics/${epic.id}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="hover:text-cyan-400 transition-colors"
+                          className="hover:text-blue-400 transition-colors"
                         >
-                          <CardTitle className="text-lg group-hover:text-cyan-400 transition-colors">
+                          <CardTitle className="text-lg group-hover:text-blue-400 transition-colors">
                             {epic.title}
                           </CardTitle>
                         </Link>

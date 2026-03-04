@@ -20,6 +20,42 @@ This is your trigger to:
 5. ✅ Note any blockers or pending user actions
 6. ✅ Ask what the user wants to work on next
 
+## Development Plan Workflow
+
+When creating development plans, always follow this two-step process:
+
+### Step 1: Save the Plan File
+
+Save the plan to ⁠ ~/.claude/plans/[descriptive-name].md ⁠ where the filename clearly describes the feature or fix.
+
+Examples:
+
+•⁠  ⁠⁠ ~/.claude/plans/analysis-textarea-toolbar.md ⁠
+•⁠  ⁠⁠ ~/.claude/plans/buddhist-calendar-fix.md ⁠
+•⁠  ⁠⁠ ~/.claude/plans/financial-reports-uiux-fixes.md ⁠
+
+### Step 2: Provide Ralph Wiggum Command
+
+Immediately after saving the plan, provide the complete Ralph Wiggum command in this format:
+
+⁠ bash
+/ralph-wiggum:ralph-loop --plan-file ~/.claude/plans/[filename].md --max-iterations [N] --completion-promise "[TASK]_COMPLETE"
+ ⁠
+
+*Parameters:*
+
+•⁠  ⁠⁠ --plan-file ⁠: Path to the saved plan file
+•⁠  ⁠⁠ --max-iterations ⁠: Estimated iterations needed (5-10 files = 15-20 iterations, 20-30 files = 25-30 iterations, 40+ files = 30-40 iterations)
+•⁠  ⁠⁠ --completion-promise ⁠: Descriptive promise matching the task (e.g., "Analysis_Textarea_Toolbar_COMPLETE", "Buddhist_Calendar_Fix_COMPLETE")
+
+*Example:*
+
+⁠ bash
+/ralph-wiggum:ralph-loop --plan-file ~/.claude/plans/financial-reports-uiux-fixes.md --max-iterations 20 --completion-promise "Financial_Reports_UIUX_Fixes_COMPLETE"
+ ⁠
+
+This ensures plans are saved for future reference and Ralph can be executed immediately.
+
 **DO NOT wait for other instructions** - treat this as your startup routine.
 
 ### Session State File
@@ -290,3 +326,41 @@ The MCP servers can be used for:
 - Error messages display inline with fields
 - Toast notifications confirm successful actions
 - localStorage operations are try/catch wrapped
+
+---
+
+## Development Plan Workflow
+
+When creating development plans, always follow this two-step process:
+
+### Step 1: Save the Plan File
+
+Save the plan to `~/.claude/plans/[descriptive-name].md` where the filename clearly describes the feature or fix.
+
+Examples:
+
+- `~/.claude/plans/analysis-textarea-toolbar.md`
+- `~/.claude/plans/buddhist-calendar-fix.md`
+- `~/.claude/plans/financial-reports-uiux-fixes.md`
+
+### Step 2: Provide Ralph Wiggum Command
+
+Immediately after saving the plan, provide the complete Ralph Wiggum command in this format:
+
+```bash
+/ralph-wiggum:ralph-loop --plan-file ~/.claude/plans/[filename].md --max-iterations [N] --completion-promise "[TASK]_COMPLETE"
+```
+
+**Parameters:**
+
+- `--plan-file`: Path to the saved plan file
+- `--max-iterations`: Estimated iterations needed (5-10 files = 15-20 iterations, 20-30 files = 25-30 iterations, 40+ files = 30-40 iterations)
+- `--completion-promise`: Descriptive promise matching the task (e.g., "Analysis_Textarea_Toolbar_COMPLETE", "Buddhist_Calendar_Fix_COMPLETE")
+
+**Example:**
+
+```bash
+/ralph-wiggum:ralph-loop --plan-file ~/.claude/plans/financial-reports-uiux-fixes.md --max-iterations 20 --completion-promise "Financial_Reports_UIUX_Fixes_COMPLETE"
+```
+
+This ensures plans are saved for future reference and Ralph can be executed immediately.

@@ -2,11 +2,16 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { UserRole } from '@/types';
+import { saveUserProfile } from '@/lib/user-profiles';
 
 interface User {
   id: string;
   name: string;
   email: string;
+  role?: UserRole;
+  avatar?: string;   // base64 data URL or empty
+  jobTitle?: string; // freeform job title
 }
 
 interface AuthContextType {
@@ -14,6 +19,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateProfile: (updates: Partial<Pick<User, 'name' | 'avatar' | 'jobTitle'>>) => void;
   isLoading: boolean;
 }
 
@@ -73,15 +79,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const mockUser = MOCK_USERS.find(u => u.email === email && u.password === password);
 
       if (mockUser) {
+        // Load role from user_roles localStorage
+        let userRole: UserRole = 'member';
+        try {
+          const rolesData = localStorage.getItem('user_roles');
+          if (rolesData) {
+            const roles = JSON.parse(rolesData);
+            userRole = roles[mockUser.id] || 'member';
+          }
+        } catch { /* default to member */ }
+        // Default roles for known users
+        if (mockUser.id === 'user_quenton' && userRole === 'member') userRole = 'super_admin';
+        if (mockUser.id === 'user_admin' && userRole === 'member') userRole = 'admin';
+
         const userData: User = {
           id: mockUser.id,
           name: mockUser.name,
-          email: mockUser.email
+          email: mockUser.email,
+          role: userRole,
         };
 
         setUser(userData);
         localStorage.setItem('auth_token', 'demo_token');
         localStorage.setItem('user_data', JSON.stringify(userData));
+        saveUserProfile({ userId: userData.id, name: userData.name, role: userRole, email: userData.email });
         return true;
       }
 
@@ -119,6 +140,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateProfile = (updates: Partial<Pick<User, 'name' | 'avatar' | 'jobTitle'>>) => {
+    setUser(prev => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem('user_data', JSON.stringify(updated));
+      saveUserProfile({ userId: updated.id, name: updated.name, avatar: updated.avatar, jobTitle: updated.jobTitle, role: updated.role, email: updated.email });
+      return updated;
+    });
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('auth_token');
@@ -127,7 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -155,7 +186,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>

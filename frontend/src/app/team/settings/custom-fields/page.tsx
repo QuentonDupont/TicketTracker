@@ -60,10 +60,10 @@ import { toast } from 'sonner'
 const fieldTypeConfig: Record<CustomFieldType, { icon: React.ElementType, label: string, color: string }> = {
   text: { icon: Type, label: 'Text', color: 'bg-blue-500' },
   number: { icon: Hash, label: 'Number', color: 'bg-green-500' },
-  date: { icon: CalendarIcon, label: 'Date', color: 'bg-purple-500' },
+  date: { icon: CalendarIcon, label: 'Date', color: 'bg-blue-600' },
   select: { icon: List, label: 'Select', color: 'bg-orange-500' },
-  multiselect: { icon: ListChecks, label: 'Multi-Select', color: 'bg-pink-500' },
-  boolean: { icon: ToggleLeft, label: 'Toggle', color: 'bg-cyan-500' }
+  multiselect: { icon: ListChecks, label: 'Multi-Select', color: 'bg-blue-500' },
+  boolean: { icon: ToggleLeft, label: 'Toggle', color: 'bg-blue-600' }
 }
 
 // Sortable row component

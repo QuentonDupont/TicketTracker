@@ -19,14 +19,14 @@ export const BackgroundGradientAnimation = ({
       <div className="absolute inset-0 overflow-hidden">
         <div
           className={cn(
-            "absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20",
+            "absolute inset-0 bg-gradient-to-r from-blue-600/20 via-blue-500/20 to-blue-400/20",
             animate && "animate-pulse",
             className
           )}
         />
         <div
           className={cn(
-            "absolute inset-0 bg-gradient-to-br from-transparent via-cyan-500/10 to-transparent",
+            "absolute inset-0 bg-gradient-to-br from-transparent via-blue-500/10 to-transparent",
             animate && "animate-pulse",
             className
           )}
@@ -37,7 +37,7 @@ export const BackgroundGradientAnimation = ({
         />
         <div
           className={cn(
-            "absolute inset-0 bg-gradient-to-tl from-purple-500/10 via-transparent to-cyan-500/10",
+            "absolute inset-0 bg-gradient-to-tl from-blue-600/10 via-transparent to-blue-400/10",
             animate && "animate-pulse",
             className
           )}

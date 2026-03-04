@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
         <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
           <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
             <CardHeader className="space-y-1 text-center">
-              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                 Check Your Email
               </CardTitle>
               <CardDescription className="text-muted-foreground">
@@ -60,14 +60,14 @@ export default function ForgotPasswordPage() {
             
             <CardContent className="space-y-4">
               <div className="text-center py-4">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center">
                   <Mail className="h-8 w-8 text-white" />
                 </div>
                 <p className="text-foreground/80 text-sm">
                   Didn't receive the email? Check your spam folder or{' '}
                   <button 
                     onClick={() => setIsEmailSent(false)}
-                    className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium"
+                    className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
                   >
                     try again
                   </button>
@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
               <div className="space-y-2">
                 <Button 
                   onClick={() => router.push('/auth/login')}
-                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-medium py-2.5 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2.5 transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25"
                 >
                   <div className="flex items-center space-x-2">
                     <ArrowLeft className="h-4 w-4" />
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <Card className="w-full max-w-md backdrop-blur-xl bg-card border-border shadow-2xl">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
               Forgot Password
             </CardTitle>
             <CardDescription className="text-muted-foreground">
@@ -125,7 +125,7 @@ export default function ForgotPasswordPage() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    className="pl-10 bg-card/5 border-border/20 text-white placeholder:text-muted-foreground/50 focus:border-blue-500 focus:ring-blue-500/20"
                     required
                   />
                 </div>
@@ -133,7 +133,7 @@ export default function ForgotPasswordPage() {
               
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-medium py-2.5 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2.5 transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -153,7 +153,7 @@ export default function ForgotPasswordPage() {
             <div className="mt-6 text-center">
               <Link 
                 href="/auth/login" 
-                className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium text-sm"
+                className="text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm"
               >
                 <div className="flex items-center justify-center space-x-1">
                   <ArrowLeft className="h-4 w-4" />

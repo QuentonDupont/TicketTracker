@@ -181,7 +181,7 @@ export default function EpicDetailPage({ params }: { params: Promise<{ id: strin
       <MainLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="flex flex-col items-center space-y-4">
-            <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-muted-foreground">Loading epic...</p>
           </div>
         </div>
@@ -378,7 +378,7 @@ export default function EpicDetailPage({ params }: { params: Promise<{ id: strin
                       >
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium group-hover:text-cyan-400 transition-colors">
+                            <span className="font-medium group-hover:text-blue-400 transition-colors">
                               {ticket.title}
                             </span>
                             <Badge variant="outline" className={priorityColors[ticket.priority]}>

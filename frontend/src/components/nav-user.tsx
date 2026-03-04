@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import {
   IconCreditCard,
   IconDotsVertical,
@@ -7,7 +8,6 @@ import {
   IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react"
-
 import {
   Avatar,
   AvatarFallback,
@@ -31,6 +31,10 @@ import {
 import { useAuth } from "@/lib/auth"
 import { toast } from "sonner"
 
+function getInitials(name: string) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'U'
+}
+
 export function NavUser({
   user,
 }: {
@@ -41,12 +45,18 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { logout } = useAuth()
+  const { logout, user: authUser } = useAuth()
+  const router = useRouter()
 
   const handleLogout = () => {
     toast.success("Logged out successfully")
     logout()
   }
+
+  const displayName = authUser?.name || user.name
+  const displayEmail = authUser?.email || user.email
+  const displayAvatar = authUser?.avatar || user.avatar
+  const initials = getInitials(displayName)
 
   return (
     <SidebarMenu>
@@ -57,15 +67,15 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <Avatar className="h-8 w-8 rounded-lg">
+                {displayAvatar && <AvatarImage src={displayAvatar} alt={displayName} className="object-cover" />}
+                <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-600 to-violet-700 text-white text-xs font-bold">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
-                </span>
+                <span className="truncate font-medium">{displayName}</span>
+                <span className="text-muted-foreground truncate text-xs">{displayEmail}</span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -79,22 +89,22 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {displayAvatar && <AvatarImage src={displayAvatar} alt={displayName} className="object-cover" />}
+                  <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-600 to-violet-700 text-white text-xs font-bold">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
-                  </span>
+                  <span className="truncate font-medium">{displayName}</span>
+                  <span className="text-muted-foreground truncate text-xs">{displayEmail}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/profile')}>
                 <IconUserCircle />
-                Account
+                My Profile
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <IconCreditCard />

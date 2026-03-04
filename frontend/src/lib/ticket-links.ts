@@ -233,7 +233,7 @@ export function getLinkTypeIcon(linkType: TicketLinkType): string {
 // Get link type color
 export function getLinkTypeColor(linkType: TicketLinkType): string {
   const colorMap: Record<TicketLinkType, string> = {
-    'Parent/Child': 'text-purple-500',
+    'Parent/Child': 'text-blue-600',
     'Duplicates': 'text-yellow-500',
     'Relates To': 'text-blue-500',
     'Blocks': 'text-red-500',

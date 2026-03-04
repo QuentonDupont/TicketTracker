@@ -161,7 +161,7 @@ export function TicketForm({ onSubmit, initialData, mode = 'create' }: TicketFor
   const statusColors = {
     'To Do': 'bg-gray-100 text-gray-800 border-gray-200',
     'In Progress': 'bg-blue-100 text-blue-800 border-blue-200',
-    'Ready for Code Review': 'bg-purple-100 text-purple-800 border-purple-200',
+    'Ready for Code Review': 'bg-blue-100 text-blue-800 border-blue-200',
     'Ready For QA': 'bg-orange-100 text-orange-800 border-orange-200',
     'In QA': 'bg-yellow-100 text-yellow-800 border-yellow-200',
     'Ready to Release': 'bg-indigo-100 text-indigo-800 border-indigo-200',
@@ -273,7 +273,7 @@ export function TicketForm({ onSubmit, initialData, mode = 'create' }: TicketFor
                   </SelectItem>
                   <SelectItem value="Ready for Code Review">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full bg-purple-500`} />
+                      <div className={`w-2 h-2 rounded-full bg-blue-600`} />
                       Ready for Code Review
                     </div>
                   </SelectItem>

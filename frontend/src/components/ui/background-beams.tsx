@@ -28,9 +28,9 @@ export const BackgroundBeams = ({ className }: { className?: string }) => {
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.1" />
-            <stop offset="50%" stopColor="#a855f7" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
+            <stop offset="50%" stopColor="#1e40af" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
           </linearGradient>
           <linearGradient
             id="gradient2"
@@ -39,9 +39,9 @@ export const BackgroundBeams = ({ className }: { className?: string }) => {
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stopColor="#a855f7" stopOpacity="0.1" />
-            <stop offset="50%" stopColor="#22d3ee" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#1e40af" stopOpacity="0.1" />
+            <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#1e40af" stopOpacity="0.1" />
           </linearGradient>
           <linearGradient
             id="gradient3"
@@ -50,9 +50,9 @@ export const BackgroundBeams = ({ className }: { className?: string }) => {
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.1" />
-            <stop offset="50%" stopColor="#ec4899" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
+            <stop offset="50%" stopColor="#60a5fa" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#1e40af" stopOpacity="0.1" />
           </linearGradient>
         </defs>
         

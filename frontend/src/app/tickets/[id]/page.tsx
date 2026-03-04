@@ -43,14 +43,21 @@ import {
   CheckCircle2,
 } from "lucide-react"
 import { toast } from "sonner"
-import { Ticket, Epic } from "@/types"
+import { Ticket, Epic, TicketActivity, TicketComment } from "@/types"
 import { LinkedTicketsCard } from "@/components/linked-tickets-card"
+import { LinkedDocumentsCard } from "@/components/linked-documents-card"
 import { TicketLinkModal } from "@/components/ticket-link-modal"
+import { seedDummyDocumentLinks } from "@/lib/document-links"
+import { useAuth } from "@/lib/auth"
+import { getActivitiesForTicket, logTicketChange } from "@/lib/activity-storage"
+import { getCommentsForTicket, addComment, updateComment, deleteComment } from "@/lib/comment-storage"
+import { formatDistanceToNow } from "date-fns"
+import { MessageSquare, Send, Pencil, Trash2 as TrashIcon } from "lucide-react"
 
 const statusColors = {
   'To Do': 'bg-gray-500 text-white',
   'In Progress': 'bg-blue-500 text-white',
-  'Ready for Code Review': 'bg-purple-500 text-white',
+  'Ready for Code Review': 'bg-blue-600 text-white',
   'Ready For QA': 'bg-orange-500 text-white',
   'In QA': 'bg-yellow-500 text-white',
   'Ready to Release': 'bg-indigo-500 text-white',
@@ -76,9 +83,17 @@ const statusIcons = {
 export default function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params)
   const router = useRouter()
+  const { user } = useAuth()
   const [ticket, setTicket] = useState<Ticket | null>(null)
   const [linkedEpic, setLinkedEpic] = useState<Epic | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+
+  // Activity and comment states
+  const [activities, setActivities] = useState<TicketActivity[]>([])
+  const [comments, setComments] = useState<TicketComment[]>([])
+  const [newComment, setNewComment] = useState('')
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null)
+  const [editingCommentContent, setEditingCommentContent] = useState('')
 
   // Inline editing states
   const [isEditingTitle, setIsEditingTitle] = useState(false)
@@ -94,6 +109,11 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false)
   const [linkRefreshKey, setLinkRefreshKey] = useState(0)
 
+  const refreshActivitiesAndComments = (ticketId: number) => {
+    setActivities(getActivitiesForTicket(ticketId))
+    setComments(getCommentsForTicket(ticketId))
+  }
+
   useEffect(() => {
     // Load ticket from localStorage
     const loadTicket = () => {
@@ -104,6 +124,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           const found = tickets.find(t => t.id === parseInt(resolvedParams.id))
           if (found) {
             setTicket(found)
+            refreshActivitiesAndComments(found.id)
 
             // Load linked epic if exists
             if (found.epic_id) {
@@ -133,6 +154,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     }
 
     loadTicket()
+    seedDummyDocumentLinks()
   }, [resolvedParams.id, router])
 
   // Load available epics for epic selection
@@ -152,6 +174,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     if (!ticket) return
 
     try {
+      const oldStatus = ticket.status
       const storedTickets = localStorage.getItem('tickets')
       if (storedTickets) {
         const tickets: Ticket[] = JSON.parse(storedTickets)
@@ -159,7 +182,9 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           t.id === ticket.id ? { ...t, status: newStatus } : t
         )
         localStorage.setItem('tickets', JSON.stringify(updatedTickets))
+        logTicketChange(ticket.id, 'status_change', `Status changed from ${oldStatus} to ${newStatus}`, user?.name || 'Unknown', 'status', oldStatus, newStatus)
         setTicket({ ...ticket, status: newStatus })
+        refreshActivitiesAndComments(ticket.id)
         toast.success(`Status updated to ${newStatus}`)
       }
     } catch (error) {
@@ -199,6 +224,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     if (!ticket) return
 
     try {
+      const oldValue = ticket[field]
       const storedTickets = localStorage.getItem('tickets')
       if (storedTickets) {
         const tickets: Ticket[] = JSON.parse(storedTickets)
@@ -206,6 +232,17 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           t.id === ticket.id ? { ...t, [field]: value } : t
         )
         localStorage.setItem('tickets', JSON.stringify(updatedTickets))
+
+        // Log activity for the field change
+        const activityType = field === 'priority' ? 'priority_change'
+          : field === 'assignee' ? 'assignee_change'
+          : field === 'tags' ? 'tag_change'
+          : field === 'epic_id' ? 'epic_change'
+          : 'field_edit'
+        const oldStr = typeof oldValue === 'object' ? JSON.stringify(oldValue) : String(oldValue ?? '')
+        const newStr = typeof value === 'object' ? JSON.stringify(value) : String(value ?? '')
+        logTicketChange(ticket.id, activityType, `${field.replace(/_/g, ' ')} updated`, user?.name || 'Unknown', field, oldStr, newStr)
+
         setTicket({ ...ticket, [field]: value })
 
         // Update linked epic if epic_id changed
@@ -218,10 +255,11 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           }
         }
 
-        toast.success(`${field.replace('_', ' ')} updated successfully`)
+        refreshActivitiesAndComments(ticket.id)
+        toast.success(`${field.replace(/_/g, ' ')} updated successfully`)
       }
     } catch (error) {
-      toast.error(`Error updating ${field.replace('_', ' ')}`)
+      toast.error(`Error updating ${field.replace(/_/g, ' ')}`)
     }
   }
 
@@ -340,7 +378,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
       <MainLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="flex flex-col items-center space-y-4">
-            <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-muted-foreground">Loading ticket...</p>
           </div>
         </div>
@@ -618,7 +656,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               </CardContent>
             </Card>
 
-            {/* Activity Timeline - Placeholder */}
+            {/* Activity Timeline */}
             <Card>
               <CardHeader>
                 <CardTitle>Activity Timeline</CardTitle>
@@ -627,13 +665,34 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-1">
+                  {/* Always show ticket created as first entry */}
+                  {activities.map((activity) => {
+                    const activityColor = activity.type === 'status_change' ? 'bg-blue-500'
+                      : activity.type === 'comment_added' ? 'bg-green-500'
+                      : activity.type === 'priority_change' ? 'bg-orange-500'
+                      : activity.type === 'assignee_change' ? 'bg-purple-500'
+                      : 'bg-gray-400'
+                    return (
+                      <div key={activity.id} className="flex gap-3">
+                        <div className="flex flex-col items-center">
+                          <div className={`w-2 h-2 rounded-full ${activityColor} mt-2`}></div>
+                          <div className="w-px h-full bg-border mt-1"></div>
+                        </div>
+                        <div className="flex-1 pb-4">
+                          <p className="text-sm font-medium">{activity.description}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {activity.user_name} &middot; {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
                   <div className="flex gap-3">
                     <div className="flex flex-col items-center">
                       <div className="w-2 h-2 rounded-full bg-blue-500 mt-2"></div>
-                      <div className="w-px h-full bg-border mt-1"></div>
                     </div>
-                    <div className="flex-1 pb-4">
+                    <div className="flex-1 pb-2">
                       <p className="text-sm font-medium">Ticket created</p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(ticket.created_date).toLocaleDateString()} at{' '}
@@ -641,25 +700,137 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                       </p>
                     </div>
                   </div>
-                  <div className="text-center py-4 text-sm text-muted-foreground">
-                    More activity will appear here as the ticket progresses
-                  </div>
+                  {activities.length === 0 && (
+                    <div className="text-center py-2 text-sm text-muted-foreground">
+                      Activity will appear here as the ticket progresses
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Comments - Placeholder */}
+            {/* Comments */}
             <Card>
               <CardHeader>
-                <CardTitle>Comments</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  Comments ({comments.length})
+                </CardTitle>
                 <CardDescription>
                   Collaborate with your team
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <p className="text-sm">No comments yet</p>
-                  <p className="text-xs mt-1">Be the first to add a comment</p>
+              <CardContent className="space-y-4">
+                {/* Comment list */}
+                {comments.length > 0 ? (
+                  <div className="space-y-4">
+                    {comments.map((comment) => (
+                      <div key={comment.id} className="flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium shrink-0">
+                          {comment.author_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-medium">{comment.author_name}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(comment.created_date), { addSuffix: true })}
+                            </span>
+                            {comment.is_edited && (
+                              <span className="text-xs text-muted-foreground">(edited)</span>
+                            )}
+                          </div>
+                          {editingCommentId === comment.id ? (
+                            <div className="space-y-2">
+                              <Textarea
+                                value={editingCommentContent}
+                                onChange={(e) => setEditingCommentContent(e.target.value)}
+                                className="min-h-[60px] text-sm"
+                                autoFocus
+                              />
+                              <div className="flex gap-2">
+                                <Button size="sm" onClick={() => {
+                                  if (editingCommentContent.trim()) {
+                                    updateComment(comment.id, editingCommentContent.trim())
+                                    refreshActivitiesAndComments(ticket.id)
+                                    setEditingCommentId(null)
+                                    toast.success('Comment updated')
+                                  }
+                                }}>Save</Button>
+                                <Button size="sm" variant="ghost" onClick={() => setEditingCommentId(null)}>Cancel</Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{comment.content}</p>
+                          )}
+                          {user?.email === comment.author_email && editingCommentId !== comment.id && (
+                            <div className="flex gap-1 mt-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 px-2 text-xs"
+                                onClick={() => {
+                                  setEditingCommentId(comment.id)
+                                  setEditingCommentContent(comment.content)
+                                }}
+                              >
+                                <Pencil className="h-3 w-3 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 px-2 text-xs text-red-500 hover:text-red-600"
+                                onClick={() => {
+                                  deleteComment(comment.id)
+                                  refreshActivitiesAndComments(ticket.id)
+                                  toast.success('Comment deleted')
+                                }}
+                              >
+                                <TrashIcon className="h-3 w-3 mr-1" />
+                                Delete
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 text-muted-foreground">
+                    <p className="text-sm">No comments yet</p>
+                    <p className="text-xs mt-1">Be the first to add a comment</p>
+                  </div>
+                )}
+
+                {/* Add comment form */}
+                <Separator />
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium shrink-0">
+                    {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Textarea
+                      placeholder="Write a comment..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      className="min-h-[80px] text-sm"
+                    />
+                    <Button
+                      size="sm"
+                      disabled={!newComment.trim()}
+                      onClick={() => {
+                        if (newComment.trim() && user) {
+                          addComment(ticket.id, newComment.trim(), user.name, user.email)
+                          setNewComment('')
+                          refreshActivitiesAndComments(ticket.id)
+                          toast.success('Comment added')
+                        }
+                      }}
+                    >
+                      <Send className="h-4 w-4 mr-2" />
+                      Comment
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -812,7 +983,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                             className="w-3 h-3 rounded"
                             style={{ backgroundColor: linkedEpic.color }}
                           />
-                          <span className="text-sm font-medium group-hover:text-cyan-400 transition-colors">
+                          <span className="text-sm font-medium group-hover:text-blue-400 transition-colors">
                             {linkedEpic.title}
                           </span>
                         </div>
@@ -876,6 +1047,9 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               onLinksChanged={() => setLinkRefreshKey(prev => prev + 1)}
               key={linkRefreshKey}
             />
+
+            {/* Linked Documents */}
+            <LinkedDocumentsCard ticketId={ticket.id} />
           </div>
         </div>
       </div>

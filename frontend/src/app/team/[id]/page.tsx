@@ -178,9 +178,9 @@ export default function TeamMemberDetailPage() {
   const getSkillLevelColor = (level: string) => {
     switch (level) {
       case 'senior':
-        return 'bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/30'
+        return 'bg-blue-600/20 text-blue-700 dark:text-blue-300 border-blue-600/30'
       case 'mid':
-        return 'bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30'
+        return 'bg-blue-600/20 text-blue-700 dark:text-blue-300 border-blue-600/30'
       case 'junior':
         return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 border-yellow-500/30'
       default:
@@ -245,7 +245,7 @@ export default function TeamMemberDetailPage() {
             </Button>
 
             <Avatar className="h-20 w-20">
-              <AvatarFallback className="text-2xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white">
+              <AvatarFallback className="text-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white">
                 {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -322,7 +322,7 @@ export default function TeamMemberDetailPage() {
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-cyan-400" />
+                  <Mail className="h-5 w-5 text-blue-400" />
                   Contact Information
                 </CardTitle>
               </CardHeader>
@@ -438,7 +438,7 @@ export default function TeamMemberDetailPage() {
 
                   <div className="p-4 rounded-lg bg-muted/50 border border-border">
                     <div className="flex items-center gap-2 mb-1">
-                      <Target className="h-4 w-4 text-cyan-400" />
+                      <Target className="h-4 w-4 text-blue-400" />
                       <Label className="text-muted-foreground text-sm">Completed Tickets</Label>
                     </div>
                     <p className="text-2xl font-bold">{member.completedTickets}</p>
@@ -446,7 +446,7 @@ export default function TeamMemberDetailPage() {
 
                   <div className="p-4 rounded-lg bg-muted/50 border border-border">
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="h-4 w-4 text-purple-400" />
+                      <Clock className="h-4 w-4 text-blue-500" />
                       <Label className="text-muted-foreground text-sm">Avg Resolution Time</Label>
                     </div>
                     <p className="text-2xl font-bold">{member.avgResolutionTime}h</p>
@@ -460,7 +460,7 @@ export default function TeamMemberDetailPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-cyan-400" />
+                    <Briefcase className="h-5 w-5 text-blue-400" />
                     Current Projects
                   </CardTitle>
                   <Button size="sm" variant="outline">
@@ -482,7 +482,7 @@ export default function TeamMemberDetailPage() {
                             <h4 className="font-medium">{project}</h4>
                             <p className="text-sm text-muted-foreground mt-1">Active contributor</p>
                           </div>
-                          <Badge variant="outline" className="border-cyan-500/30 text-cyan-600 dark:text-cyan-400">
+                          <Badge variant="outline" className="border-blue-600/30 text-blue-600 dark:text-blue-400">
                             Active
                           </Badge>
                         </div>
@@ -502,7 +502,7 @@ export default function TeamMemberDetailPage() {
             <Card className="glass">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-purple-400" />
+                  <Award className="h-5 w-5 text-blue-500" />
                   Skills & Expertise
                 </CardTitle>
               </CardHeader>
@@ -519,7 +519,7 @@ export default function TeamMemberDetailPage() {
                         </div>
                         <span className="text-sm text-muted-foreground">{skill.level}%</span>
                       </div>
-                      <Progress value={skill.level} className="[&>div]:bg-purple-500" />
+                      <Progress value={skill.level} className="[&>div]:bg-blue-600" />
                     </div>
                   ))}
                 </div>

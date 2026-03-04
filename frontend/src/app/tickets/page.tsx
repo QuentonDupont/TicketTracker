@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { MainLayout } from "@/components/layout/main-layout"
 import { EnhancedTicketTable } from "@/components/enhanced-ticket-table"
@@ -152,7 +152,7 @@ const initialTickets: Ticket[] = [
 const statusColors = {
   'To Do': 'bg-gray-500 text-white',
   'In Progress': 'bg-blue-500 text-white',
-  'Ready for Code Review': 'bg-purple-500 text-white',
+  'Ready for Code Review': 'bg-blue-600 text-white',
   'Ready For QA': 'bg-orange-500 text-white',
   'In QA': 'bg-yellow-500 text-white',
   'Ready to Release': 'bg-indigo-500 text-white',
@@ -187,7 +187,7 @@ function DroppableColumn({
     <div
       ref={setNodeRef}
       className={`border rounded-lg p-4 ${color} w-80 flex-shrink-0 min-h-[200px] transition-all ${
-        isOver ? 'ring-2 ring-cyan-500 bg-cyan-50/50 dark:bg-cyan-950/50 scale-[1.02]' : ''
+        isOver ? 'ring-2 ring-blue-600 bg-blue-50/50 dark:bg-blue-950/50 scale-[1.02]' : ''
       }`}
     >
       <div className="flex items-center justify-between mb-4">
@@ -238,7 +238,7 @@ function DraggableTicketCard({ ticket, onEdit, onDelete, isDragging }: {
     <Card
       ref={setNodeRef}
       style={style}
-      className={`cursor-pointer hover:shadow-md transition-shadow ${isSortableDragging ? 'shadow-lg ring-2 ring-cyan-500' : ''}`}
+      className={`cursor-pointer hover:shadow-md transition-shadow ${isSortableDragging ? 'shadow-lg ring-2 ring-blue-600' : ''}`}
       onClick={() => router.push(`/tickets/${ticket.id}`)}
     >
       <CardContent className="p-4">
@@ -257,7 +257,7 @@ function DraggableTicketCard({ ticket, onEdit, onDelete, isDragging }: {
             <Link
               href={`/tickets/${ticket.id}`}
               onClick={(e) => e.stopPropagation()}
-              className="font-medium text-sm leading-tight hover:text-cyan-400 hover:underline transition-colors flex-1"
+              className="font-medium text-sm leading-tight hover:text-blue-400 hover:underline transition-colors flex-1"
             >
               {ticket.title}
             </Link>
@@ -373,7 +373,7 @@ function KanbanBoard({ tickets, onEdit, onDelete, onView, onStatusChange }: {
   const columns = [
     { status: 'To Do' as const, title: 'To Do', color: 'border-gray-200' },
     { status: 'In Progress' as const, title: 'In Progress', color: 'border-blue-200' },
-    { status: 'Ready for Code Review' as const, title: 'Ready for Code Review', color: 'border-purple-200' },
+    { status: 'Ready for Code Review' as const, title: 'Ready for Code Review', color: 'border-blue-200' },
     { status: 'Ready For QA' as const, title: 'Ready For QA', color: 'border-orange-200' },
     { status: 'In QA' as const, title: 'In QA', color: 'border-yellow-200' },
     { status: 'Ready to Release' as const, title: 'Ready to Release', color: 'border-indigo-200' },
@@ -478,7 +478,7 @@ function KanbanBoard({ tickets, onEdit, onDelete, onView, onStatusChange }: {
       {/* Drag Overlay */}
       <DragOverlay>
         {activeTicket ? (
-          <Card className="cursor-grabbing shadow-2xl ring-2 ring-cyan-500 w-80">
+          <Card className="cursor-grabbing shadow-2xl ring-2 ring-blue-600 w-80">
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
@@ -535,7 +535,7 @@ function TicketStats({ tickets }: { tickets: Ticket[] }) {
         <div className="text-sm text-muted-foreground">In Progress</div>
       </div>
       <div className="text-center">
-        <div className="text-2xl font-bold text-purple-600">{stats.readyForCodeReview}</div>
+        <div className="text-2xl font-bold text-blue-600">{stats.readyForCodeReview}</div>
         <div className="text-sm text-muted-foreground">Code Review</div>
       </div>
       <div className="text-center">
@@ -564,10 +564,27 @@ function TicketStats({ tickets }: { tickets: Ticket[] }) {
 
 export default function TicketsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [editingTicket, setEditingTicket] = useState<Ticket | null>(null)
   const [viewMode, setViewMode] = useState<'list' | 'kanban'>('list')
+
+  // Get status filter from URL
+  const statusFilter = searchParams.get('status')
+
+  // Filter tickets based on URL parameter
+  const filteredTickets = statusFilter
+    ? tickets.filter(ticket => {
+        if (statusFilter === 'open') {
+          return ticket.status !== 'Live'
+        }
+        if (statusFilter === 'completed') {
+          return ticket.status === 'Live'
+        }
+        return true
+      })
+    : tickets
 
   // Load tickets from localStorage on mount
   useEffect(() => {
@@ -628,6 +645,13 @@ export default function TicketsPage() {
     ))
   }
 
+  const handleQuickUpdate = (ticketId: number, updates: Partial<Ticket>) => {
+    setTickets(prev => prev.map(t =>
+      t.id === ticketId ? { ...t, ...updates } : t
+    ))
+    toast.success('Ticket updated')
+  }
+
   const handleBulkAction = (action: string) => {
     // Placeholder for bulk actions
     toast.info(`Bulk ${action} action triggered`)
@@ -639,10 +663,31 @@ export default function TicketsPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Tickets</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold tracking-tight">Tickets</h1>
+              {statusFilter && (
+                <Badge variant="outline" className="bg-blue-600/10 text-blue-600 border-blue-600/30">
+                  {statusFilter === 'open' && 'Open Only'}
+                  {statusFilter === 'completed' && 'Completed Only'}
+                </Badge>
+              )}
+            </div>
             <p className="text-muted-foreground">
-              Manage and track all your tickets with advanced filtering and organization
+              {statusFilter
+                ? `Showing ${filteredTickets.length} ${statusFilter} ticket${filteredTickets.length !== 1 ? 's' : ''}`
+                : 'Manage and track all your tickets with advanced filtering and organization'
+              }
             </p>
+            {statusFilter && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push('/tickets')}
+                className="mt-2 text-xs text-blue-400 hover:text-blue-300"
+              >
+                Clear filter
+              </Button>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -712,20 +757,21 @@ export default function TicketsPage() {
         </div>
 
         {/* Stats */}
-        <TicketStats tickets={tickets} />
+        <TicketStats tickets={filteredTickets} />
 
         {/* Content */}
         <div className="space-y-4">
           {viewMode === 'list' ? (
             <EnhancedTicketTable
-              tickets={tickets}
+              tickets={filteredTickets}
               onEdit={handleEditTicket}
               onDelete={handleDeleteTicket}
               onView={handleViewTicket}
+              onQuickUpdate={handleQuickUpdate}
             />
           ) : (
             <KanbanBoard
-              tickets={tickets}
+              tickets={filteredTickets}
               onEdit={handleEditTicket}
               onDelete={handleDeleteTicket}
               onView={handleViewTicket}

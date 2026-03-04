@@ -29,11 +29,11 @@ interface EpicFormProps {
 }
 
 const predefinedColors = [
-  { name: 'Cyan', value: '#22d3ee' },
-  { name: 'Purple', value: '#a855f7' },
+  { name: 'Cyan', value: '#3b82f6' },
+  { name: 'Purple', value: '#1e40af' },
   { name: 'Green', value: '#10b981' },
   { name: 'Blue', value: '#3b82f6' },
-  { name: 'Pink', value: '#ec4899' },
+  { name: 'Pink', value: '#60a5fa' },
   { name: 'Orange', value: '#f97316' },
   { name: 'Indigo', value: '#6366f1' },
   { name: 'Emerald', value: '#059669' },
@@ -44,7 +44,7 @@ export function EpicForm({ onSubmit, initialData, mode = 'create' }: EpicFormPro
     title: initialData?.title || '',
     description: initialData?.description || '',
     status: initialData?.status || 'Planning',
-    color: initialData?.color || '#22d3ee',
+    color: initialData?.color || '#3b82f6',
     start_date: initialData?.start_date || '',
     end_date: initialData?.end_date || '',
     owner: initialData?.owner || ''
@@ -97,7 +97,7 @@ export function EpicForm({ onSubmit, initialData, mode = 'create' }: EpicFormPro
           title: '',
           description: '',
           status: 'Planning',
-          color: '#22d3ee',
+          color: '#3b82f6',
           start_date: '',
           end_date: '',
           owner: ''
@@ -291,7 +291,7 @@ export function EpicForm({ onSubmit, initialData, mode = 'create' }: EpicFormPro
                 title: '',
                 description: '',
                 status: 'Planning',
-                color: '#22d3ee',
+                color: '#3b82f6',
                 start_date: '',
                 end_date: '',
                 owner: ''

@@ -184,7 +184,7 @@ const skillCategories = [
   { name: "Frontend", icon: Code, color: "#3b82f6" },
   { name: "Backend", icon: Database, color: "#10b981" },
   { name: "DevOps", icon: Shield, color: "#f59e0b" },
-  { name: "Design", icon: Palette, color: "#ec4899" },
+  { name: "Design", icon: Palette, color: "#60a5fa" },
   { name: "Quality", icon: CheckCircle, color: "#8b5cf6" },
   { name: "Management", icon: Briefcase, color: "#ef4444" }
 ]
@@ -901,7 +901,7 @@ function PerformanceTracking() {
             alice: { label: "Alice", color: "#3b82f6" },
             bob: { label: "Bob", color: "#10b981" },
             charlie: { label: "Charlie", color: "#f59e0b" },
-            diana: { label: "Diana", color: "#ec4899" },
+            diana: { label: "Diana", color: "#60a5fa" },
             eve: { label: "Eve", color: "#8b5cf6" }
           }}
           className="h-[300px]"
@@ -914,7 +914,7 @@ function PerformanceTracking() {
               <Line type="monotone" dataKey="alice" stroke="#3b82f6" strokeWidth={2} />
               <Line type="monotone" dataKey="bob" stroke="#10b981" strokeWidth={2} />
               <Line type="monotone" dataKey="charlie" stroke="#f59e0b" strokeWidth={2} />
-              <Line type="monotone" dataKey="diana" stroke="#ec4899" strokeWidth={2} />
+              <Line type="monotone" dataKey="diana" stroke="#60a5fa" strokeWidth={2} />
               <Line type="monotone" dataKey="eve" stroke="#8b5cf6" strokeWidth={2} />
               <ChartTooltip content={<ChartTooltipContent />} />
             </LineChart>

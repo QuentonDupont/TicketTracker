@@ -39,13 +39,15 @@ import {
   AlertCircle,
   Target
 } from "lucide-react"
-import { Ticket, Epic } from "@/types"
+import { Ticket, Epic, TeamMember } from "@/types"
+import { getTeamMembers } from "@/lib/team-storage"
 
 interface EnhancedTicketTableProps {
   tickets: Ticket[]
   onEdit: (ticket: Ticket) => void
   onDelete: (ticketId: number) => void
   onView: (ticket: Ticket) => void
+  onQuickUpdate?: (ticketId: number, updates: Partial<Ticket>) => void
 }
 
 type SortField = 'title' | 'status' | 'priority' | 'due_date' | 'created_date'
@@ -54,7 +56,7 @@ type SortDirection = 'asc' | 'desc'
 const statusColors = {
   'To Do': 'bg-gray-500 text-white',
   'In Progress': 'bg-blue-500 text-white',
-  'Ready for Code Review': 'bg-purple-500 text-white',
+  'Ready for Code Review': 'bg-blue-600 text-white',
   'Ready For QA': 'bg-orange-500 text-white',
   'In QA': 'bg-yellow-500 text-white',
   'Ready to Release': 'bg-indigo-500 text-white',
@@ -67,7 +69,7 @@ const priorityColors = {
   'High': 'bg-red-100 text-red-800 border-red-200'
 }
 
-export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView }: EnhancedTicketTableProps) {
+export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView, onQuickUpdate }: EnhancedTicketTableProps) {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
@@ -76,8 +78,9 @@ export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView }: Enhan
   const [sortField, setSortField] = useState<SortField>('created_date')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [availableEpics, setAvailableEpics] = useState<Epic[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
-  // Load available epics
+  // Load available epics and team members
   useEffect(() => {
     try {
       const storedEpics = localStorage.getItem('epics')
@@ -87,6 +90,11 @@ export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView }: Enhan
       }
     } catch (error) {
       console.error('Error loading epics:', error)
+    }
+    try {
+      setTeamMembers(getTeamMembers())
+    } catch (error) {
+      console.error('Error loading team members:', error)
     }
   }, [])
 
@@ -342,7 +350,7 @@ export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView }: Enhan
                           <Link
                             href={`/tickets/${ticket.id}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="hover:text-cyan-400 hover:underline transition-colors"
+                            className="hover:text-blue-400 hover:underline transition-colors"
                           >
                             {ticket.title}
                           </Link>
@@ -360,33 +368,111 @@ export function EnhancedTicketTable({ tickets, onEdit, onDelete, onView }: Enhan
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Badge className={statusColors[ticket.status]}>
-                        {ticket.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={priorityColors[ticket.priority]}>
-                        {ticket.priority}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {ticket.assignee ? (
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4" />
-                          {ticket.assignee}
-                        </div>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {onQuickUpdate ? (
+                        <Select
+                          value={ticket.status}
+                          onValueChange={(value) => onQuickUpdate(ticket.id, { status: value as Ticket['status'] })}
+                        >
+                          <SelectTrigger className="h-7 w-auto min-w-0 border-none bg-transparent p-0 shadow-none hover:bg-accent rounded-full [&>svg]:hidden">
+                            <Badge className={`${statusColors[ticket.status]} cursor-pointer`}>
+                              {ticket.status}
+                            </Badge>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="To Do">To Do</SelectItem>
+                            <SelectItem value="In Progress">In Progress</SelectItem>
+                            <SelectItem value="Ready for Code Review">Ready for Code Review</SelectItem>
+                            <SelectItem value="Ready For QA">Ready For QA</SelectItem>
+                            <SelectItem value="In QA">In QA</SelectItem>
+                            <SelectItem value="Ready to Release">Ready to Release</SelectItem>
+                            <SelectItem value="Live">Live</SelectItem>
+                          </SelectContent>
+                        </Select>
                       ) : (
-                        <span className="text-muted-foreground">Unassigned</span>
+                        <Badge className={statusColors[ticket.status]}>
+                          {ticket.status}
+                        </Badge>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span className={isOverdue(ticket.due_date, ticket.status) ? 'text-red-600 font-medium' : ''}>
-                          {new Date(ticket.due_date).toLocaleDateString()}
-                        </span>
-                      </div>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {onQuickUpdate ? (
+                        <Select
+                          value={ticket.priority}
+                          onValueChange={(value) => onQuickUpdate(ticket.id, { priority: value as Ticket['priority'] })}
+                        >
+                          <SelectTrigger className="h-7 w-auto min-w-0 border-none bg-transparent p-0 shadow-none hover:bg-accent rounded-full [&>svg]:hidden">
+                            <Badge variant="outline" className={`${priorityColors[ticket.priority]} cursor-pointer`}>
+                              {ticket.priority}
+                            </Badge>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Low">Low</SelectItem>
+                            <SelectItem value="Medium">Medium</SelectItem>
+                            <SelectItem value="High">High</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Badge variant="outline" className={priorityColors[ticket.priority]}>
+                          {ticket.priority}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {onQuickUpdate ? (
+                        <Select
+                          value={ticket.assignee || '__unassigned__'}
+                          onValueChange={(value) => onQuickUpdate(ticket.id, { assignee: value === '__unassigned__' ? undefined : value })}
+                        >
+                          <SelectTrigger className="h-7 w-auto min-w-[100px] border-none bg-transparent px-1 shadow-none hover:bg-accent">
+                            <div className="flex items-center gap-1.5 text-sm">
+                              <User className="h-3.5 w-3.5 text-muted-foreground" />
+                              <span className={ticket.assignee ? '' : 'text-muted-foreground'}>
+                                {ticket.assignee || 'Unassigned'}
+                              </span>
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="__unassigned__">Unassigned</SelectItem>
+                            {teamMembers.map((member) => (
+                              <SelectItem key={member.id} value={member.name}>
+                                {member.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        ticket.assignee ? (
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            {ticket.assignee}
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">Unassigned</span>
+                        )
+                      )}
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {onQuickUpdate ? (
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                          <input
+                            type="date"
+                            value={ticket.due_date}
+                            onChange={(e) => onQuickUpdate(ticket.id, { due_date: e.target.value })}
+                            className={`bg-transparent border-none outline-none text-sm cursor-pointer hover:text-primary ${
+                              isOverdue(ticket.due_date, ticket.status) ? 'text-red-600 font-medium' : ''
+                            }`}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          <span className={isOverdue(ticket.due_date, ticket.status) ? 'text-red-600 font-medium' : ''}>
+                            {new Date(ticket.due_date).toLocaleDateString()}
+                          </span>
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell>
                       {ticket.tags && ticket.tags.length > 0 ? (

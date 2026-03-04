@@ -41,7 +41,7 @@ const linkTypeIcons: Record<TicketLinkType, any> = {
 const statusColors = {
   'To Do': 'bg-gray-500 text-white',
   'In Progress': 'bg-blue-500 text-white',
-  'Ready for Code Review': 'bg-purple-500 text-white',
+  'Ready for Code Review': 'bg-blue-600 text-white',
   'Ready For QA': 'bg-orange-500 text-white',
   'In QA': 'bg-yellow-500 text-white',
   'Ready to Release': 'bg-indigo-500 text-white',

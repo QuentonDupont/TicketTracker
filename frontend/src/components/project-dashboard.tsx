@@ -158,7 +158,7 @@ const mockTeamMembers: TeamMember[] = [
 
 const statusColors = {
   'To Do': 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-  'In Progress': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+  'In Progress': 'bg-blue-600/20 text-blue-300 border-blue-600/30',
   'Done': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
 }
 
@@ -179,11 +179,11 @@ function DashboardMetrics({ tickets }: { tickets: Ticket[] }) {
       title: "Total Tickets",
       value: totalTickets,
       icon: Target,
-      color: "from-cyan-500 to-blue-500",
+      color: "from-blue-600 to-blue-500",
       glow: "glow-cyan"
     },
     {
-      title: "Open Tickets", 
+      title: "Open Tickets",
       value: openTickets,
       icon: AlertCircle,
       color: "from-yellow-500 to-orange-500",
@@ -200,7 +200,7 @@ function DashboardMetrics({ tickets }: { tickets: Ticket[] }) {
       title: "Active Projects",
       value: totalProjects,
       icon: DollarSign,
-      color: "from-purple-500 to-pink-500",
+      color: "from-blue-600 to-blue-700",
       glow: "glow-purple"
     }
   ]
@@ -237,7 +237,7 @@ function DashboardMetrics({ tickets }: { tickets: Ticket[] }) {
 function TicketsChart({ tickets }: { tickets: Ticket[] }) {
   const statusData = [
     { name: 'To Do', value: tickets.filter(t => t.status === 'To Do').length, color: '#6b7280' },
-    { name: 'In Progress', value: tickets.filter(t => t.status === 'In Progress').length, color: '#22d3ee' },
+    { name: 'In Progress', value: tickets.filter(t => t.status === 'In Progress').length, color: '#3b82f6' },
     { name: 'Done', value: tickets.filter(t => t.status === 'Done').length, color: '#10b981' }
   ]
 
@@ -252,7 +252,7 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
       <Card className="glass card-hover">
         <CardHeader>
           <CardTitle className="text-foreground flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-cyan-400" />
+            <Sparkles className="h-5 w-5 text-blue-400" />
             Tickets by Status
           </CardTitle>
         </CardHeader>
@@ -290,7 +290,7 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
       <Card className="glass card-hover">
         <CardHeader>
           <CardTitle className="text-foreground flex items-center gap-2">
-            <Zap className="h-5 w-5 text-purple-400" />
+            <Zap className="h-5 w-5 text-blue-500" />
             Tickets by Priority
           </CardTitle>
         </CardHeader>
@@ -307,7 +307,7 @@ function TicketsChart({ tickets }: { tickets: Ticket[] }) {
               <BarChart data={priorityData}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Bar dataKey="value" fill="#a855f7" />
+                <Bar dataKey="value" fill="#3b82f6" />
                 <ChartTooltip content={<ChartTooltipContent />} />
               </BarChart>
             </ResponsiveContainer>
@@ -323,7 +323,7 @@ function TicketTable() {
     <Card className="glass card-hover">
       <CardHeader>
         <CardTitle className="text-foreground flex items-center gap-2">
-          <Target className="h-5 w-5 text-cyan-400" />
+          <Target className="h-5 w-5 text-blue-400" />
           Recent Tickets
         </CardTitle>
         <CardDescription className="text-muted-foreground">Latest tickets in the system</CardDescription>
@@ -360,7 +360,7 @@ function TicketTable() {
                 </TableCell>
                 <TableCell className="text-foreground/90">{new Date(ticket.due_date).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10">
+                  <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300 hover:bg-blue-600/10">
                     Edit
                   </Button>
                 </TableCell>
@@ -378,7 +378,7 @@ function ProjectTable() {
     <Card className="glass card-hover">
       <CardHeader>
         <CardTitle className="text-foreground flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-purple-400" />
+          <DollarSign className="h-5 w-5 text-blue-500" />
           Active Projects
         </CardTitle>
         <CardDescription className="text-muted-foreground">Current projects in development</CardDescription>
@@ -434,7 +434,7 @@ function TeamTable() {
     <Card className="glass card-hover">
       <CardHeader>
         <CardTitle className="text-foreground flex items-center gap-2">
-          <User className="h-5 w-5 text-cyan-400" />
+          <User className="h-5 w-5 text-blue-400" />
           Team Members
         </CardTitle>
         <CardDescription className="text-muted-foreground">Development team and their availability</CardDescription>
@@ -534,7 +534,7 @@ export function ProjectDashboard() {
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-foreground font-medium px-6 py-2.5 glow-gradient hover-lift btn-glow">
+            <Button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-foreground font-medium px-6 py-2.5 glow-gradient hover-lift btn-glow">
               <Plus className="h-4 w-4 mr-2" />
               Add New Ticket
             </Button>
@@ -557,13 +557,13 @@ export function ProjectDashboard() {
       {/* Tabs for different sections */}
       <Tabs defaultValue="tickets" className="space-y-6">
         <TabsList className="glass border-border">
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-foreground">
             Tickets
           </TabsTrigger>
-          <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
+          <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-foreground">
             Projects
           </TabsTrigger>
-          <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-purple-600 data-[state=active]:text-foreground">
+          <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-foreground">
             Team
           </TabsTrigger>
         </TabsList>
